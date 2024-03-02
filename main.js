@@ -8,7 +8,7 @@ utilisera : Math.floor(Math.random()*6)+1 . Pour déclencher l’exécution de l
 <body> avec <body onload="parfoisLong()">
 */
 
-function cps_load()
+function wowo_load()
 {
 	var click_actual=document.getElementById("click_show");
 	click_actual.innerHTML="0";

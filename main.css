@@ -1,11 +1,53 @@
+
+body {
+	background-color: rgb(100,255,100);
+#screen_horizontal {
+	background-color: rgb(150,255,150);
+	position:fixed;
+	top:30px;
+	right:30px;
+	bottom:30px;
+	left:30px;
+#screen_vertical {
+	background-color: rgb(200,255,200);
+
+
+	display:block;
+	
+	/* generals for item */
+	section {
+		/* to debug */
+		outline: solid 10px black;
+		
+		display: flex;
+		justify-content: center;
+	}
+
+	/* specific by items */
+	#answer {
+		outline: solid 10px green;
+
+		/*align-items: center;*/
+		text-align: center;
+		/*padding: 5% 5%;*/
+		/*margin: 20vh 40vh 0vh 40vh;*/
+	}
+	
+	#question_left {
+		outline: solid 10px blue;
+
+	}
+	#question_right {
+		outline: solid 10px blue;
+
+	}
+}
+}
+}
+
+
 #click_box {
 	background-color: black;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	padding: 5% 5%;
-	margin: 20vh 40vh 0vh 40vh;
 	/*min-height: 90vh;*/
 }
 #click_show {
