@@ -1,7 +1,8 @@
-/* fonts custom */
+/* custom fonts */
 @font-face {
   font-family: 'letters_question';
-  src: url(./source/fonts/question.ttf);
+  src: url(./source/fonts/answer.ttf);
+  /*src: url(./source/fonts/question.otf);*/
 }
 @font-face {
   font-family: 'letters_answer';
@@ -62,6 +63,7 @@ body {
 	}
 	#question_right {
 		outline: solid 2px blue; /* to debug */
+  		font-family: 'letters_question';
 
 	}
 
