@@ -8,20 +8,55 @@
 //variable initalization
 
 
-var game_id=0;
-var game_state=-1;
+let game_id=0;
+let game_state=-1;
 
-var game_round_question_left="...";
-var game_round_question_right="...";
-var game_round_answer="...";
+let game_round_problem_key=0;
+let game_round_problem_left="...";
+let game_round_problem_right="...";
+let game_round_solutions=[];
+
+//reading
+
+let game_problems={"soo":["emp","thy"]};
+let game_problems_keys=["soo"];
+
+let file_xml = new XMLHttpRequest();
+file_xml.onreadystatechange=function() {
+	//event when the file finish reading
+    if (file_xml.readyState==4 && file_xml.status==200) 
+	{
+		game_problems={};
+		const here_text_all=file_xml.responseText;
+		const here_text_lines=here_text_all.split("\n");
+		for (let i=0;i<here_text_lines.length;i++)
+		{
+			let here_list=here_text_lines[i].split(" ");
+			let k=here_list[0];
+			game_problems[k]=[];
+			for (let i=1;i<here_list.length;i++)
+			{
+				game_problems[k].push(here_list[i]);
+			}
+			//console.log(k+":"+game_problems[k]);
+		}
+		game_problems_keys=Object.keys(game_problems);//is needed to acces random key.
+		
+        console.log("click there :");
+        console.log(game_problems);
+        console.log("or not.");
+    }
+}
+file_xml.open('GET', 'build/soluces.txt', true);
+file_xml.send();
 
 
 //elements initialization
-var display_element_question_left=0;
-var display_element_question_right=0;
-var display_element_answer_1=0;
-var display_element_answer_2=0;
-var display_element_answer_3=0;
+let display_element_question_left=0;
+let display_element_question_right=0;
+let display_element_answer_1=0;
+let display_element_answer_2=0;
+let display_element_answer_3=0;
 
 
 //--- functions/use ---
@@ -37,6 +72,15 @@ function wowo_use_rickroll(f_range)
   return Math.floor(Math.random() * f_range);
 }
 
+function wowo_use_text_begin(f_str)
+{
+	return f_str[0]+f_str[1]+f_str[2];
+}
+
+function wowo_use_text_end(f_str)
+{
+	return f_str[3]+f_str[4]+f_str[5];
+}
 
 //--- functions/game ---
 
@@ -44,9 +88,10 @@ function wowo_use_rickroll(f_range)
 
 function wowo_game_restart()
 {
-	game_round_question_left= String(wowo_use_rickroll(1000));
-	game_round_question_right= String(wowo_use_rickroll(1000));
-	game_round_answer= String((parseInt(game_round_question_left)+parseInt(game_round_question_right))/2);
+	game_round_problem_key=game_problems_keys[wowo_use_rickroll(game_problems_keys.length)];
+	game_round_problem_left= wowo_use_text_begin(game_round_problem_key);
+	game_round_problem_right= wowo_use_text_end(game_round_problem_key);
+	game_round_answer= "___";
 }
 
 
@@ -68,8 +113,8 @@ function wowo_display_load()
 
 function wowo_display_refresh()
 {
-	display_element_question_left.innerHTML=game_round_question_left;
-	display_element_question_right.innerHTML=game_round_question_right;
+	display_element_question_left.innerHTML=game_round_problem_left;
+	display_element_question_right.innerHTML=game_round_problem_right;
 	display_element_answer_1.innerHTML=game_round_answer[0];
 	display_element_answer_2.innerHTML=game_round_answer[1];
 	display_element_answer_3.innerHTML=game_round_answer[2];
@@ -83,7 +128,7 @@ function wowo_display_refresh()
 
 function wowo_action_load()
 {
-	var click_actual=document.getElementById("jsedit");
+	let click_actual=document.getElementById("jsedit");
 
 	click_actual.innerHTML="loading";
 
@@ -104,8 +149,8 @@ function cps_refresh()
 
 function cps_click()
 {
-	var click_actual=document.getElementById("click_show");
-	var click_best=document.getElementById("best_show");
+	let click_actual=document.getElementById("click_show");
+	let click_best=document.getElementById("best_show");
 	click_actual.innerHTML++;
 	if (parseInt(click_actual.innerHTML) > parseInt(click_best.innerHTML))
 		click_best.innerHTML=click_actual.innerHTML;
