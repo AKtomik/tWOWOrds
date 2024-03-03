@@ -42,7 +42,7 @@ body {
 			/* to debug */
 			outline: solid 2px black;
 			font-size: 10vh;
-			padding: 10vh;
+			padding: 3vh 3vw 3vh 3vw;
 			
 			display: flex;
 			justify-content: center;
@@ -52,11 +52,6 @@ body {
 	/* specific by items */
 	#answer {
 		outline: solid 2px green;
-
-		/*align-items: center;*/
-		text-align: center;
-		/*padding: 5% 5%;*/
-		/*margin: 20vh 40vh 0vh 40vh;*/
 	}
 	
 	#question_left {
