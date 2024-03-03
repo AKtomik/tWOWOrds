@@ -1,26 +1,45 @@
 
 body {
-	background-color: rgb(100,255,100);
-#screen_horizontal {
-	background-color: rgb(150,255,150);
+	background-color: rgb(0,0,0);
+#screen_contain_vertical {
+	background-color: rgb(200,255,100);
 	position:fixed;
 	top:30px;
 	right:30px;
 	bottom:30px;
 	left:30px;
-#screen_vertical {
-	background-color: rgb(200,255,200);
+#screen_contain_horizontal {
+	width: 50%;
+	background-color: rgb(100,255,200);
 
 
-	display:block;
+#screen_contain {
+
+	background-color: rgb(255,255,255);
+	
+	align-items: center;
 	
 	/* generals for item */
 	section {
 		/* to debug */
 		outline: solid 10px black;
 		
-		display: flex;
-		justify-content: center;
+		width: 50%;
+		height: 50%;
+		display: block;
+		
+
+		/*display: flex;
+		justify-content: center;*/
+		
+		
+		section {
+			/* to debug */
+			outline: solid 10px black;
+			
+			display: flex;
+			justify-content: center;
+		}
 	}
 
 	/* specific by items */
@@ -41,6 +60,7 @@ body {
 		outline: solid 10px blue;
 
 	}
+}
 }
 }
 }
