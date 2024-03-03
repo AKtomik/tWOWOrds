@@ -1,3 +1,5 @@
+sett_timeout=1
+
 print("--- tWOWOrds game ---")
 print("starting compiler.py...")
 
@@ -65,18 +67,18 @@ while (program_run):
 			os.mkdir("./build")
 
 		if (not os.path.isfile("./resource/dictionnaire.txt")):
-			print(f"{prefix_action()} : cant find [resource\dictionnaire.txt] !")
+			print(f"{prefix_action()} : cant find [resource/dictionnaire.txt] !")
 		else:
 			print(f"{prefix_action()} : sorting words...")
 			print(f"{prefix_action()} : sorting words... reading...")
-			with open(os.path.dirname(os.path.realpath('__file__'))+"resource\dictionnaire.txt","r") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/resource/dictionnaire.txt","r") as myfile:
 				word_all=myfile.readlines()
 				word_strip = [v for v in word_all if (len(v.rstrip("\n"))==6)]
 				#print(word_strip)
 
 
 			print(f"{prefix_action()} : sorting words... writting...")
-			with open(os.path.dirname(os.path.realpath('__file__'))+"build\dictionnaire6.txt","w") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/dictionnaire6.txt","w") as myfile:
 				for v in word_strip:
 					myfile.write(v)
 			print(f"{prefix_action()} : {len(word_strip)} words sorted!")
@@ -90,7 +92,7 @@ while (program_run):
 			print(f"{prefix_action()} : compiling...")
 			print(f"{prefix_action()} : compiling... reading...")
 			
-			with open(os.path.dirname(os.path.realpath('__file__'))+"build\dictionnaire6.txt","r") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/dictionnaire6.txt","r") as myfile:
 				word_all=myfile.readlines()
 				#word_strip = [v for v in word_all if (len(v)==7)]
 				word_strip = [v.rstrip("\n") for v in word_all]
@@ -117,8 +119,8 @@ while (program_run):
 			print(f"{prefix_action()} : compiling... solving...")
 			for v_first in word_strip:
 				#if (index>=len(word_strip)/10*index_ten):
-				if (count_msg_time+ 10 <time()):
-					print(f"{prefix_action()} : compiling... solving... [{round(index / len(word_strip)*100)}%]")
+				if (count_msg_time+ sett_timeout <time()):
+					print(f"{prefix_action()} : compiling... solving... [{round(index / len(word_strip)*100)}%] ({v_first})")
 					count_msg_time=time()
 
 				#save when first begin change
@@ -153,7 +155,7 @@ while (program_run):
 
 
 			print(f"{prefix_action()} : compiling... saving...")
-			with open(os.path.dirname(os.path.realpath('__file__'))+"build\soluces.txt", mode="w", encoding="utf-8") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mode="w", encoding="utf-8") as myfile:
 				#writting
 				for k in save_problems.keys():
 					myfile.write(k)
