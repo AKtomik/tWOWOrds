@@ -69,14 +69,14 @@ while (program_run):
 		else:
 			print(f"{prefix_action()} : sorting words...")
 			print(f"{prefix_action()} : sorting words... reading...")
-			with open(__file__+"\\..\\resource\dictionnaire.txt","r") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"resource\dictionnaire.txt","r") as myfile:
 				word_all=myfile.readlines()
 				word_strip = [v for v in word_all if (len(v.rstrip("\n"))==6)]
 				#print(word_strip)
 
 
 			print(f"{prefix_action()} : sorting words... writting...")
-			with open(__file__+"\\..\\build\dictionnaire6.txt","w") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"build\dictionnaire6.txt","w") as myfile:
 				for v in word_strip:
 					myfile.write(v)
 			print(f"{prefix_action()} : {len(word_strip)} words sorted!")
@@ -90,7 +90,7 @@ while (program_run):
 			print(f"{prefix_action()} : compiling...")
 			print(f"{prefix_action()} : compiling... reading...")
 			
-			with open(__file__+"\\..\\build\dictionnaire6.txt","r") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"build\dictionnaire6.txt","r") as myfile:
 				word_all=myfile.readlines()
 				#word_strip = [v for v in word_all if (len(v)==7)]
 				word_strip = [v.rstrip("\n") for v in word_all]
@@ -153,7 +153,7 @@ while (program_run):
 
 
 			print(f"{prefix_action()} : compiling... saving...")
-			with open(__file__+"\\..\\build\soluces.txt", mode="w", encoding="utf-8") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"build\soluces.txt", mode="w", encoding="utf-8") as myfile:
 				#writting
 				for k in save_problems.keys():
 					myfile.write(k)

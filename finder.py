@@ -17,7 +17,7 @@ time_begin=time()
 print(f"{prefix_action()} : reading...")
 
 read_problems={}
-with open(__file__+"\\..\\build\soluces.txt", mode="r", encoding="utf-8") as myfile:
+with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mode="r", encoding="utf-8") as myfile:
 	#read
 	for this_line in myfile.readlines():
 		this_sol=this_line.rstrip("\n").split(" ")

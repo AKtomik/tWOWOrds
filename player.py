@@ -26,7 +26,7 @@ time_begin=time()
 
 print(f"{prefix_action()} : reading...")
 read_problems={}
-with open(__file__+"\\..\\build\soluces.txt", mode="r", encoding="utf-8") as myfile:
+with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mode="r", encoding="utf-8") as myfile:
 	#read
 	for this_line in myfile.readlines():
 		this_sol=this_line.rstrip("\n").split(" ")
@@ -51,7 +51,7 @@ print(f"{prefix_action()} : ready!")
 program_run=True
 print("[WOWO] : let's play!")
 while (program_run):#each round
-	print("search a problem...")
+	print("[WOWO] : search a problem...")
 	
 	#searching a problem
 	round_problem_key=listroll(list(read_problems.keys()))
@@ -61,10 +61,38 @@ while (program_run):#each round
 	
 	round_problem_key=0#bcs dict, isn't used.
 	
-	print("could you find the solution?")
-	while (program_run):#each round
-		print(round_problem_txt_1+" ___ "+round_problem_txt_2)
-		("> ")
+	print("[WOWO] : could you find the solution?")
+
+	user_left=3
+	user_error=False
+
+	while (user_left>0):#each round
+		if (not user_error):
+			print(round_problem_txt_1+" ___ "+round_problem_txt_2)
+
+		user_try=input("> ")
+		user_error=False
+		user_try=user_try.upper()
+
+		if (user_try.len()!=3):
+			user_error=True
+		else:
+			for char in user_try:
+				if (not char.isalpha()):
+					user_error=True
+
+
+		if (user_error):
+			print("wrong try")
+			pass
+		elif (user_try in round_solutions):
+			print("good answer!")
+			print("you have solved the problem!")
+			user_left=0
+		else:
+			print("wrong answer!")
+			print(f"{user_left} try remaining.")
+			user_left-=1
 	print(round_solutions)
 
 

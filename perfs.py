@@ -23,7 +23,7 @@ deltas=0
 for i in range(0,input_times+1):
 	delta_begin=time()
 	
-	with open(__file__+"\\..\\build\soluces.txt", mode="r", encoding="utf-8") as myfile:
+	with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mode="r", encoding="utf-8") as myfile:
 		#save
 		
 		#read_string=myfile.read()
