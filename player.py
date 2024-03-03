@@ -32,7 +32,7 @@ with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mo
 		this_sol=this_line.rstrip("\n").split(" ")
 		read_problems[this_sol[0]]=[]
 		for i in range(1,len(this_sol)):
-			read_problems[this_sol[0]].append(this_sol[i])			
+			read_problems[this_sol[0]].append(this_sol[i])
 print(f"{prefix_action()} : read!")
 
 
@@ -61,12 +61,16 @@ while (program_run):#each round
 	
 	round_problem_key=0#bcs dict, isn't used.
 	
-	print("[WOWO] : could you find the solution?")
+	if (len(round_solutions)>1):
+		print("[WOWO] : could you find answers?")
+	else:
+		print("[WOWO] : could you find the answer?")
 
+	user_find=[]
 	user_left=3
 	user_error=False
 
-	while (user_left>0):#each round
+	while (user_left>0 or len(round_solutions) <= len(user_find)):#each round
 		if (not user_error):
 			print(round_problem_txt_1+" ___ "+round_problem_txt_2)
 
@@ -74,7 +78,7 @@ while (program_run):#each round
 		user_error=False
 		user_try=user_try.upper()
 
-		if (user_try.len()!=3):
+		if (len(user_try)!=3):
 			user_error=True
 		else:
 			for char in user_try:
@@ -83,16 +87,22 @@ while (program_run):#each round
 
 
 		if (user_error):
-			print("wrong try")
+			print("wrong typing.")
 			pass
 		elif (user_try in round_solutions):
 			print("good answer!")
-			print("you have solved the problem!")
-			user_left=0
+			user_find.append(user_try)
 		else:
 			print("wrong answer!")
-			print(f"{user_left} try remaining.")
 			user_left-=1
-	print(round_solutions)
-
-
+			print(f"{user_left} try remaining.")
+	
+	print(f"[WOWO] : {len(user_find)}/{len(round_solutions)} found")
+	print(end="( ")
+	for v in round_solutions:
+		if (round_solutions in user_find):
+			print(v.lower(),end=" ")
+		else:
+			print(v.upper(),end=" ")
+	print(")")
+	input("enter to restart... ")
