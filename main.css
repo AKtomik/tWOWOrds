@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'letters_question';
+  src: url(./source/fonts/question.ttf);
+}
+@font-face {
+  font-family: 'letters_answer';
+  src: url(./source/fonts/answer.ttf);
+}
 
 body {
 	background-color: rgb(0,0,0);
@@ -25,14 +33,12 @@ body {
 	
 	/* generals for item */
 	section {
-		/* to debug */
-		outline: solid 2px black;
+		outline: solid 2px black; /* to debug */
 		display: inline-block;
 		
 		
 		section {
-			/* to debug */
-			outline: solid 2px black;
+			outline: solid 2px black; /* to debug */
 			font-size: 10vh;
 			/*padding: 3vh 3vw 3vh 3vw;*/
 			padding: 3vmin;
@@ -44,15 +50,17 @@ body {
 
 	/* specific by items */
 	#answer {
-		outline: solid 2px green;
+		outline: solid 2px green; /* to debug */
+  		font-family: 'letters_answer';
 	}
 	
 	#question_left {
-		outline: solid 2px blue;
+		outline: solid 2px blue; /* to debug */
+  		font-family: 'letters_question';
 
 	}
 	#question_right {
-		outline: solid 2px blue;
+		outline: solid 2px blue; /* to debug */
 
 	}
 
@@ -60,13 +68,11 @@ body {
 
 	/* generals for item */
 	footer {
-		/* to debug */
-		outline: solid 2px black;
+		outline: solid 2px black; /* to debug */
 		
 		
 		form {
-			/* to debug */
-			outline: solid 2px red;
+			outline: solid 2px red; /* to debug */
 			font-size: 5vh;
 			padding: 3vmin;
 			
