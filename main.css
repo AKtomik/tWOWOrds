@@ -10,9 +10,9 @@
 }
 
 body {
-	background-color: rgb(0,0,0);
+	background-color: rgb(255,255,255);
 #screen_contain_vertical { /* first box */
-	background-color: rgb(200,255,100);
+	background-color: rgb(0,0,0);
 	position:fixed;
 	top:30px;
 	right:30px;
@@ -21,7 +21,7 @@ body {
 
 
 #screen_contain_horizontal { /* second box */
-	background-color: rgb(100,255,200);
+	background-color: rgb(255,0,0);
 
 	position: absolute;
 	top: 50%;
@@ -30,17 +30,17 @@ body {
 
 #screen_contain { /* third box */
 
-	background-color: rgb(255,255,255);
+	background-color: rgb(13,17,23);
 	
 	
 	/* generals for item */
 	section {
-		outline: solid 2px black; /* to debug */
+		outline: solid 2px white; /* to debug */
 		display: inline-block;
 		
 		
 		section {
-			outline: solid 2px black; /* to debug */
+			outline: solid 2px white; /* to debug */
 			font-size: 10vh;
 			/*padding: 3vh 3vw 3vh 3vw;*/
 			padding: 3vmin;
@@ -53,16 +53,19 @@ body {
 	/* specific by items */
 	#answer {
 		outline: solid 2px green; /* to debug */
+		color: rgb(0,0,255);
   		font-family: 'letters_answer';
 	}
 	
 	#question_left {
 		outline: solid 2px blue; /* to debug */
+		color: rgb(255,255,255);
   		font-family: 'letters_question';
 
 	}
 	#question_right {
 		outline: solid 2px blue; /* to debug */
+		color: rgb(255,255,255);
   		font-family: 'letters_question';
 
 	}
@@ -71,29 +74,37 @@ body {
 
 	/* generals for item */
 	footer {
-		outline: solid 2px black; /* to debug */
+		outline: solid 2px white; /* to debug */
+		
+		color: rgb(0,0,255);
 		
 		
-		form {
-			outline: solid 2px red; /* to debug */
-			font-size: 5vh;
-			padding: 3vmin;
-			
-			display: inline-block;
-			justify-content: center;
-			text-align: center;
+		font-size: 5vh;
+		padding: 3vmin;
 
-			position:relative;
-			top: 0%;
-			left: 50%;
-			transform: translate(-50%, -0%);
+		justify-content: center;
+		text-align: center;
 
-			input {
-				padding: 0px;
-			}
+		position:relative;
+		top: 0%;
+		left: 50%;
+		transform: translate(-50%, -0%);
+
+		input {
+			padding: 0px;
 		}
 	}
 }
 }
+}
+nav {
+	position: absolute;
+	right:40px;
+	bottom:40px;
+
+	
+
+	color:rgb(255,255,255);
+
 }
 }
