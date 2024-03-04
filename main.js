@@ -1,5 +1,13 @@
 //--- initialization ---
 
+
+/**
+ * settings variables :
+ * you can adjust them.
+ */
+const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
+
+
 /**
  * game variables :
  * clear when reload (als all other)
@@ -15,7 +23,7 @@ let game_round_problem_key=0;
 let game_round_problem_left="...";
 let game_round_problem_right="...";
 let game_round_solutions=[];
-let game_round_answer="a";
+let game_round_answer="";
 
 /**
  * file variables :
@@ -144,13 +152,14 @@ function wowo_display_refresh()
 {
 	display_element_question_left.innerHTML=game_round_problem_left;
 	display_element_question_right.innerHTML=game_round_problem_right;
-	for (v in display_element_answer)
+
+	console.log("refresh :"+game_round_answer.length);
+	for (let i=0;i<display_element_answer.length;i++)
 	{
-		v.innerHTML="_";
-	}
-	for (let i=0;i<game_round_answer.length;i++)
-	{
-		display_element_answer[i].innerHTML=game_round_answer[i];
+		if (game_round_answer.length>i)
+			display_element_answer[i].innerHTML=game_round_answer[i];
+		else
+			display_element_answer[i].innerHTML="_";
 	}
 }
 
@@ -173,6 +182,54 @@ function wowo_action_load()
 }
 
 
-//function wowo_action_type()
-//{
-//}
+	//here_key=here_key.toUpperCase();
+function wowo_action_press(f_event)
+{
+	let here_key=String(f_event.key);
+	console.log(here_key);
+	let here_found=false;
+	
+	
+	if (here_key==="Backspace")
+	{
+		if (game_round_answer.length>0)
+		{
+			game_round_answer=game_round_answer.slice(0,game_round_answer.length-1);
+			here_found=true;
+			console.log("back!");
+		}
+	}
+	
+	else if (here_key==="Enter" || here_key===" ")
+	{
+		if (game_round_answer.length===3)
+		{
+			here_found=true;
+			console.log("enter!");
+		}
+	}
+	
+	else if (here_key.length===1)
+	{
+		for (let char in sett_type_letters)
+		{
+			if (sett_type_letters[char]===here_key)
+			{
+				here_found=true;
+			}
+		}
+		if (here_found) 
+		{
+			if (game_round_answer.length<3)
+			{
+				console.log("type:",here_key);
+				game_round_answer+=here_key;
+			}
+		}
+	}
+
+	if (here_found) 
+	{
+		wowo_display_refresh();
+	}
+}
