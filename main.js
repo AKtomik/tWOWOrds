@@ -147,7 +147,9 @@ function wowo_use_text_case(f_str)
 
 function wowo_game_restart()
 {
-	chat_add("new round");
+	game_round_answer="";
+	game_round_answer_good=[];
+	game_round_answer_wrong=[];
 
 	game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
 	game_round_problem_left=wowo_use_text_case(wowo_use_text_begin(game_round_problem_key));
@@ -156,6 +158,19 @@ function wowo_game_restart()
 	console.log("[WOWO] [round] : problem="+game_round_problem_key);
 	console.log("[WOWO] [round] : solutions=");
 	console.log(game_round_solutions);
+	
+
+	chat_add("new round");
+	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
+	game_state=1;
+}
+
+
+function wowo_game_end()
+{
+	chat_add("end round");
+	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
+	game_state=2;
 }
 
 function wowo_game_isAnswer(f_str)
@@ -327,10 +342,15 @@ function wowo_action_check()
 
 		let here_edit=true;
 		
-		if (wowo_game_isAnswer(game_round_answer[0]+game_round_answer[1]+game_round_answer[2]))
+		if (wowo_game_isAnswer(game_round_answer))
 		{
 			game_round_answer_good.push(game_round_answer);
 			chat_add(game_round_answer+" : good try");
+			chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
+			if (game_round_answer_good.length===game_round_solutions.length)
+			{
+				chat_add("TODO : all found");
+			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
 			chat_add(game_round_answer+" : wrong try");
@@ -340,5 +360,20 @@ function wowo_action_check()
 		{
 			wowo_display_refresh();
 		}
+	}
+}
+
+
+function wowo_action_next()
+{
+	if (game_state===1)
+	{
+		wowo_game_end();
+		wowo_display_refresh();
+	} 
+	else if (game_state===2) 
+	{
+		wowo_game_restart();
+		wowo_display_refresh();
 	}
 }
