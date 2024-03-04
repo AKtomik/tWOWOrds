@@ -203,27 +203,36 @@ function wowo_display_refresh()
 	display_element_question_left.innerHTML=game_round_problem_left;
 	display_element_question_right.innerHTML=game_round_problem_right;
 
-	if (game_round_answer_good.includes(game_round_answer))
+	here_color="#ffffff";
+	if (game_state===1)
 	{
-		display_element_answers.style.color="#00ff00";
+		if (game_round_answer_good.includes(game_round_answer))
+		{
+			here_color="#00ff00";
+		}
+		else if (game_round_answer_wrong.includes(game_round_answer))
+		{
+			here_color="#ff0000";
+		}
+		else if (display_anim_badCheck)
+		{
+			here_color="#ffaa00";
+		}
+		else if (game_round_answer.length===3)
+		{
+			here_color="#ffff00";
+		}
+		else 
+		{
+			here_color="#aaaaaa";
+		}
 	}
-	else if (game_round_answer_wrong.includes(game_round_answer))
+	else if (game_state===2)
 	{
-		display_element_answers.style.color="#ff0000";
-	}
-	else if (display_anim_badCheck)
-	{
-		display_element_answers.style.color="#ffaa00";
-	}
-	else if (game_round_answer.length===3)
-	{
-		display_element_answers.style.color="#ffff00";
-	}
-	else 
-	{
-		display_element_answers.style.color="#ffffaa";
+		here_color="#0000ff";
 	}
 
+	display_element_answers.style.color=here_color;
 	for (let i=0;i<display_element_answer.length;i++)
 	{
 		if (game_round_answer.length>i)
@@ -278,56 +287,65 @@ function wowo_action_press(f_event)
 	let here_key=String(f_event.key);
 	let here_found=false;
 	
-	
-	if (here_key==="Backspace")
+	if (here_key===" ")
 	{
-		if (game_round_answer.length>0)
-		{
-			game_round_answer=game_round_answer.slice(0,game_round_answer.length-1);
-			here_found=true;
-			display_anim_badCheck=false;
-		}
-	}
-	
-	else if (here_key==="Enter" || here_key===" ")
-	{
-		//if (game_round_answer.length===3)
 		{
 			here_found=true;
-			wowo_action_check();
+			wowo_action_next();
 		}
 	}
-	
-	else if (here_key.length===1)
+	else if (game_state===1)
 	{
-		here_key=wowo_use_text_case(here_key);
-		for (let char in sett_type_letters)
+		
+		if (here_key==="Enter")
 		{
-			if (sett_type_letters[char]===here_key)
 			{
 				here_found=true;
+				wowo_action_check();
 			}
 		}
+
+		if (here_key==="Backspace")
+		{
+			if (game_round_answer.length>0)
+			{
+				game_round_answer=game_round_answer.slice(0,game_round_answer.length-1);
+				here_found=true;
+				display_anim_badCheck=false;
+			}
+		}
+		
+		else if (here_key.length===1)
+		{
+			here_key=wowo_use_text_case(here_key);
+			for (let char in sett_type_letters)
+			{
+				if (sett_type_letters[char]===here_key)
+				{
+					here_found=true;
+				}
+			}
+			if (here_found) 
+			{
+				if (game_round_answer.length<3)
+				{
+					display_anim_badCheck=false;
+					game_round_answer+=here_key;
+				}
+			}
+		}
+
+			if (game_round_answer.length===3)
+			{
+				//can valid
+			} else {
+				//cant valid
+			}
+
 		if (here_found) 
 		{
-			if (game_round_answer.length<3)
-			{
-				display_anim_badCheck=false;
-				game_round_answer+=here_key;
-			}
+			wowo_display_refresh();
 		}
-	}
-
-		if (game_round_answer.length===3)
-		{
-			//can valid
-		} else {
-			//cant valid
-		}
-
-	if (here_found) 
-	{
-		wowo_display_refresh();
 	}
 }
 
