@@ -125,10 +125,14 @@ function wowo_use_text_end(f_str)
 
 function wowo_game_restart()
 {
+	display_element_actual.innerHTML="find the solution!";
+
 	game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
 	game_round_problem_left=wowo_use_text_begin(game_round_problem_key);
 	game_round_problem_right=wowo_use_text_end(game_round_problem_key);
 	game_round_solutions=file_problems[game_round_problem_key];
+	console.log(game_round_problem_key);
+	console.log(game_round_solutions);
 }
 
 
@@ -153,7 +157,7 @@ function wowo_display_refresh()
 	display_element_question_left.innerHTML=game_round_problem_left;
 	display_element_question_right.innerHTML=game_round_problem_right;
 
-	console.log("refresh :"+game_round_answer.length);
+	//console.log("refresh :"+game_round_answer.length);
 	for (let i=0;i<display_element_answer.length;i++)
 	{
 		if (game_round_answer.length>i)
@@ -172,13 +176,12 @@ function wowo_action_load()
 {
 	display_element_actual=document.getElementById("jsedit");
 
-	display_element_actual.innerHTML="loading";
+	display_element_actual.innerHTML="loading...";
 
 	wowo_display_load();
 
 	wowo_game_restart();
 	wowo_display_refresh();
-	display_element_actual.innerHTML="loaded";
 }
 
 
@@ -186,7 +189,7 @@ function wowo_action_load()
 function wowo_action_press(f_event)
 {
 	let here_key=String(f_event.key);
-	console.log(here_key);
+	//console.log(here_key);
 	let here_found=false;
 	
 	
@@ -211,6 +214,7 @@ function wowo_action_press(f_event)
 	
 	else if (here_key.length===1)
 	{
+		here_key=here_key.toLowerCase();
 		for (let char in sett_type_letters)
 		{
 			if (sett_type_letters[char]===here_key)
@@ -222,10 +226,17 @@ function wowo_action_press(f_event)
 		{
 			if (game_round_answer.length<3)
 			{
-				console.log("type:",here_key);
+				//console.log("type:",here_key);
 				game_round_answer+=here_key;
 			}
 		}
+	}
+
+	if (game_round_answer.length===3)
+	{
+		//can valid
+	} else {
+		//cant valid
 	}
 
 	if (here_found) 
