@@ -48,6 +48,7 @@ let file_problems_keys=["empthy"];//is needed to acces random key.
 		{//on file state change
 		    if (file_xml.readyState==4 && file_xml.status==200) 
 			{//is finsih readling
+				chat_add("reading...");
 				file_problems={};
 				const here_text_all=file_xml.responseText;
 				const here_text_lines=here_text_all.split("\n");
@@ -61,14 +62,15 @@ let file_problems_keys=["empthy"];//is needed to acces random key.
 						file_problems[k].push(wowo_use_text_case(wowo_use_text_begin(here_list[i])));
 						//must use begin because of the \r
 					}
-					//console.log(k+":"+file_problems[k]);
+					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
 				}
 				file_problems_keys=Object.keys(file_problems);
 				file_readed=true;
 				
-		        console.log("click there :");
+		        console.log("[WOWO] [database] : click there :");
 		        console.log(file_problems);
-		        console.log("or not.");
+		        console.log("[WOWO] [database] : or not.");
+				chat_add("read");
 		    }
 		}
 
@@ -82,11 +84,13 @@ let file_problems_keys=["empthy"];//is needed to acces random key.
  * changed only on load.
  * store each HTML element we will edit
  */
-let display_element_actual=0;
+
 let display_element_question_left=0;
 let display_element_question_right=0;
 let display_element_answers=0;
 let display_element_answer=[0,0,0];
+
+let display_anim_badCheck=false;
 
 
 //--- functions/use ---
@@ -143,13 +147,14 @@ function wowo_use_text_case(f_str)
 
 function wowo_game_restart()
 {
-	display_element_actual.innerHTML="find the solution!";
+	chat_add("new round");
 
 	game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
 	game_round_problem_left=wowo_use_text_case(wowo_use_text_begin(game_round_problem_key));
 	game_round_problem_right=wowo_use_text_case(wowo_use_text_end(game_round_problem_key));
 	game_round_solutions=file_problems[game_round_problem_key];
-	console.log(game_round_problem_key);
+	console.log("[WOWO] [round] : problem="+game_round_problem_key);
+	console.log("[WOWO] [round] : solutions=");
 	console.log(game_round_solutions);
 }
 
@@ -191,12 +196,19 @@ function wowo_display_refresh()
 	{
 		display_element_answers.style.color="#ff0000";
 	}
-	else 
+	else if (display_anim_badCheck)
+	{
+		display_element_answers.style.color="#ffaa00";
+	}
+	else if (game_round_answer.length===3)
 	{
 		display_element_answers.style.color="#ffff00";
 	}
+	else 
+	{
+		display_element_answers.style.color="#ffffaa";
+	}
 
-	//console.log("refresh :"+game_round_answer.length);
 	for (let i=0;i<display_element_answer.length;i++)
 	{
 		if (game_round_answer.length>i)
@@ -213,13 +225,11 @@ function wowo_display_refresh()
 
 function wowo_action_load()
 {
-	display_element_actual=document.getElementById("jsedit");
 
-	display_element_actual.innerHTML="loading...";
+	chat_add("loading...");
 	
 	//initalisation
 	wowo_display_load();
-
 
 	wowo_action_load_wait();
 }
@@ -233,7 +243,7 @@ function wowo_action_load()
 		}
 		else
 		{
-			console.log("waiting...");
+			console.log("[WOWO] [waiter] : waiting file read...");
 			setTimeout(wowo_action_load_wait,10);
 		}
 	}
@@ -243,6 +253,7 @@ function wowo_action_load()
 	{
 		wowo_game_restart();
 		wowo_display_refresh();
+		chat_add("ready!");
 	}
 
 
@@ -250,7 +261,6 @@ function wowo_action_load()
 function wowo_action_press(f_event)
 {
 	let here_key=String(f_event.key);
-	//console.log(here_key);
 	let here_found=false;
 	
 	
@@ -260,7 +270,7 @@ function wowo_action_press(f_event)
 		{
 			game_round_answer=game_round_answer.slice(0,game_round_answer.length-1);
 			here_found=true;
-			console.log("back!");
+			display_anim_badCheck=false;
 		}
 	}
 	
@@ -269,7 +279,6 @@ function wowo_action_press(f_event)
 		//if (game_round_answer.length===3)
 		{
 			here_found=true;
-			console.log("enter!");
 			wowo_action_check();
 		}
 	}
@@ -288,18 +297,18 @@ function wowo_action_press(f_event)
 		{
 			if (game_round_answer.length<3)
 			{
-				//console.log("type:",here_key);
+				display_anim_badCheck=false;
 				game_round_answer+=here_key;
 			}
 		}
 	}
 
-	if (game_round_answer.length===3)
-	{
-		//can valid
-	} else {
-		//cant valid
-	}
+		if (game_round_answer.length===3)
+		{
+			//can valid
+		} else {
+			//cant valid
+		}
 
 	if (here_found) 
 	{
@@ -309,23 +318,27 @@ function wowo_action_press(f_event)
 
 function wowo_action_check()
 {
-	if (game_round_answer.length===3)
+	if (game_round_answer.length!=3)
 	{
-		display_element_actual.innerHTML="checking...";
+		display_anim_badCheck=true;
+	}
+	else if (!game_round_answer_wrong.includes(game_round_answer) && !game_round_answer_good.includes(game_round_answer))
+	{
 
 		let here_edit=true;
 		
 		if (wowo_game_isAnswer(game_round_answer[0]+game_round_answer[1]+game_round_answer[2]))
 		{
 			game_round_answer_good.push(game_round_answer);
+			chat_add(game_round_answer+" : good try");
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
+			chat_add(game_round_answer+" : wrong try");
 		}
 
 		if (here_edit)
 		{
 			wowo_display_refresh();
 		}
-		display_element_actual.innerHTML="check";
 	}
 }

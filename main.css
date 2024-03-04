@@ -8,6 +8,11 @@
   font-family: 'letters_answer';
   src: url(./source/fonts/answer.ttf);
 }
+@font-face {
+  font-family: 'letters_words';
+  src: url(./source/fonts/answer.ttf);
+}
+
 
 body {
 	background-color: rgb(255,255,255);
@@ -99,12 +104,22 @@ body {
 }
 nav {
 	position: absolute;
-	right:40px;
-	bottom:40px;
-
+	right:10px;
+	bottom:-40px;
+	text-align: right;
 	
+	font-family: letters_words;
 
-	color:rgb(255,255,255);
+
+	#msg_cat {
+		font-size:15px;
+		/*font-size:1vh;*/
+		color:rgb(255,255,255);
+	}
+	#msg_the {
+		font-size:15px;
+		color: rgb(13,17,23);
+	}
 
 }
 }
