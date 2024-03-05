@@ -197,7 +197,7 @@ function wowo_game_restart()
 	console.log("[WOWO] [round] : problem="+game_round_problem_key);
 	console.log("[WOWO] [round] : solutions=");
 	console.log(game_round_solutions);
-	chat_add("new round");
+	chat_add("new round","cyan");
 	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
 
 	//and change state
@@ -211,7 +211,7 @@ function wowo_game_restart()
 function wowo_game_end()
 {
 	//chat
-	chat_add("end round");
+	chat_add("end round","cyan");
 	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
 	
 	//and change state
@@ -399,7 +399,7 @@ function wowo_action_load()
 	{
 		wowo_game_restart();
 		wowo_display_refresh();
-		chat_add("ready!","red");
+		chat_add("ready!","cyan");
 	}
 
 
@@ -486,15 +486,15 @@ function wowo_action_check()
 		if (wowo_game_isAnswer(game_round_answer))
 		{
 			game_round_answer_good.push(game_round_answer);
-			chat_add(game_round_answer+" : good try");
-			chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
+			chat_add(game_round_answer+" : good try","green");
+			chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 			if (game_round_answer_good.length===game_round_solutions.length)
 			{
 				chat_add("TODO : all found");
 			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
-			chat_add(game_round_answer+" : wrong try");
+			chat_add(game_round_answer+" : wrong try","red");
 		}
 
 		if (here_edit)
