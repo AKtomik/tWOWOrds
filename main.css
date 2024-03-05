@@ -44,7 +44,7 @@ body {
 		
 		
 		section {
-			outline: solid 2px red; /* to debug */
+			/*outline: solid 2px red; to debug*/
 			font-size: 10vmin;
 			padding: 0px;
 			/*padding: 3vmin 3vw 3vmin 3vw;*/
@@ -56,19 +56,19 @@ body {
 
 	/* specific by items */
 	#answer {
-		outline: solid 2px blue; /* to debug */
+		/*outline: solid 2px blue; to debug*/
 		color: rgb(0,0,255);
   		font-family: 'letters_answer';
 	}
 	
 	#question_left {
-		outline: solid 2px white; /* to debug */
+		/*outline: solid 2px white; to debug*/
 		color: rgb(255,255,255);
   		font-family: 'letters_question';
 
 	}
 	#question_right {
-		outline: solid 2px white; /* to debug */
+		/*outline: solid 2px white; to debug*/
 		color: rgb(255,255,255);
   		font-family: 'letters_question';
 
@@ -79,7 +79,7 @@ body {
 	/* generals for item */
 	footer {
 
-		outline: solid 2px purple; /* to debug */
+		/*outline: solid 2px purple; to debug*/
 
 		/* bar */
 		#shape_bars {
