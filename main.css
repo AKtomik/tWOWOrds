@@ -26,7 +26,7 @@ body {
 
 
 #screen_contain_horizontal { /* second box */
-	background-color: rgb(255,0,0);
+	/*background-color: rgb(255,0,0); to debug*/
 
 	position: absolute;
 	top: 50%;
@@ -35,13 +35,42 @@ body {
 
 #screen_contain { /* third box */
 
-	background-color: rgb(13,17,23);
+	/*background-color: rgb(255,255,255); to debug*/
+	/*outline: solid 2px blue; to debug*/
+	display: inline-block;
+	font-size: 0;
 	
+
+	header {
+		/*outline: solid 2px red; to debug*/
+
+
+		justify-content: center;
+		text-align: center;
+		font-family: 'letters_answer';
+
+
+		position:relative;
+		top: 0%;
+		left: 50%;
+		transform: translate(-50%, 0);
+
+		#soluces {
+			color: #555555;
+
+			
+			font-size: 5vmin;
+			line-height: 5vmin;
+		}
+	}
+
 	
 	/* generals for item */
 	section {
+		line-height: 0vmin;
 		display: inline-block;
 		
+		background-color: rgb(13,17,23);
 		
 		section {
 			/*outline: solid 2px red; to debug*/
@@ -74,7 +103,6 @@ body {
 
 	}
 
-	display: inline-block;
 
 	/* generals for item */
 	footer {
@@ -173,6 +201,7 @@ nav {
 		font-size:15px;
 		/*font-size:1vmin;*/
 		color:rgb(255,255,255);
+
 	}
 	#msg_the {
 		font-size:15px;
@@ -180,4 +209,32 @@ nav {
 	}
 
 }
+}
+
+
+
+/* colorations */
+.red {
+	font-weight: normal;
+	color: #ff0000;
+}
+.green {
+	font-weight: normal;
+	color: #00ff00;
+}
+.blue {
+	font-weight: normal;
+	color: #0000ff;
+}
+.yellow {
+	font-weight: normal;
+	color: #ffff00;
+}
+.cyan {
+	font-weight: normal;
+	color: #00ffff;
+}
+.magenta {
+	font-weight: normal;
+	color: #ff00ff;
 }

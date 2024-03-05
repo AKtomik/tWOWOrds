@@ -5,11 +5,16 @@ chat_messages=[]
 /**
  * add a message to the cat
  * @param {string} f_msg the message
+ * @param {string} f_style the style for b
  */
-function chat_add(f_msg)
+function chat_add(f_msg, f_style="")
 {
-	chat_messages.push(f_msg);
 	console.log("[WOWO] [cat] : "+f_msg);
+	if (f_style!="")
+	{
+		f_msg="<b class=\""+f_style+"\">"+f_msg+"</b>"
+	}
+	chat_messages.push(f_msg);
 	chat_display();
 }
 

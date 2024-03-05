@@ -7,6 +7,7 @@
  */
 const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
 const sett_display_upper=false;
+const sett_display_wordCheck=true;//display if one of the two word is good. preformances eater.
 
 
 /**
@@ -79,7 +80,7 @@ let file_words=["potato"];
 	file_xml.send();
 }
 
-
+if (sett_display_wordCheck)
 {
 	let file_xml = new XMLHttpRequest();
 	//ON : file finish reading
@@ -109,11 +110,13 @@ let file_words=["potato"];
  * changed only on load.
  * store each HTML element we will edit
  */
-
+//body
 let display_element_question_left=0;
 let display_element_question_right=0;
 let display_element_answer=0;
-
+//header
+let display_element_soluces=0;
+//footer
 let display_element_bar_left_text=0;
 let display_element_bar_left_shape=0;
 let display_element_bar_right_text=0;
@@ -260,6 +263,8 @@ function wowo_display_load()
 	display_element_question_right=document.getElementById("question_right_0");
 	display_element_answer=document.getElementById("answer_0");
 	
+	display_element_soluces=document.getElementById("soluces");
+
 	//bar elements
 	display_element_bar_left_text=document.getElementById("bar_left_text");
 	display_element_bar_left_shape=document.getElementById("bar_left_shape");
@@ -287,6 +292,17 @@ function wowo_display_refresh()
 		}
 		display_element_answer.innerHTML=here_string;
 	}
+	{
+		here_string="";
+		for (let i=0;i<game_round_solutions.length;i++)
+		{
+			if (game_round_answer_good.includes(game_round_solutions[i]))
+				here_string+="<b class=\"green\">"+game_round_solutions[i]+"</b></br>";
+			else
+				here_string+="<b>"+"???"+"</b></br>";
+		}
+	}
+	display_element_soluces.innerHTML=here_string;
 
 	//colors, verry specific to each cases
 	here_color="#ffffff";
@@ -322,7 +338,7 @@ function wowo_display_refresh()
 
 	display_element_answer.style.color=here_color;
 	
-	if (here_wrongDetails)
+	if (here_wrongDetails && sett_display_wordCheck)
 	{
 		console.log("wowo_game_isWord(game_round_problem_left+game_round_answer)");
 		console.log(game_round_problem_left+game_round_answer);
@@ -383,7 +399,7 @@ function wowo_action_load()
 	{
 		wowo_game_restart();
 		wowo_display_refresh();
-		chat_add("ready!");
+		chat_add("ready!","red");
 	}
 
 
