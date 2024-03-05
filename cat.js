@@ -1,5 +1,6 @@
 //--- initialization ---
 
+
 chat_messages=[]
 chat_element=document.getElementById("msg_cat");
 

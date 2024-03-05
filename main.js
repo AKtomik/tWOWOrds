@@ -1,3 +1,7 @@
+chat_add("loading...");
+let span_loading_begin=new Date();//getting timespan
+let span_loading_end=0;
+
 //--- initialization ---
 //the script is loaded when the page is totaly loaded
 
@@ -15,7 +19,7 @@ const sett_display_wordCheck=true;//display if one of the two word is good. pref
  * game variables :
  * clear when reload (als all other)
  */
-let game_id=0;
+//let game_id=0;
 let game_state=-1;
 //-1 = loading
 //0 = menu
@@ -43,11 +47,13 @@ let game_round_answer_wrong=[];
  * where YYY is the end of the second word
  * where AAA (and potentialy BBB) is (are) solutions of the problem
  */
-let file_readed=false;
 let file_problems={"empthy":["soo","lot"]};
 let file_problems_keys=["empthy"];//is needed to acces random key.
 let file_words=["potato"];
+let file_readed=false;
+let file_readed_amount=0;
 
+chat_add("reading...");
 {
 	let file_xml = new XMLHttpRequest();
 	//ON : file finish reading
@@ -55,7 +61,7 @@ let file_words=["potato"];
 		{//on file state change
 		    if (file_xml.readyState==4 && file_xml.status==200) 
 			{//is finsih reading
-				chat_add("reading...");
+				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
 				file_problems={};
 				const here_text_all=file_xml.responseText;
 				const here_text_lines=here_text_all.split("\n");
@@ -72,15 +78,18 @@ let file_words=["potato"];
 					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
 				}
 				file_problems_keys=Object.keys(file_problems);
-				file_readed=true;
 				
+				console.log("[WOWO] [files] {soluces.txt} : reading... 3/3");
 		        console.log("[WOWO] [database] : click there :");
 		        console.log(file_problems);
 		        console.log("[WOWO] [database] : or not.");
-				chat_add("read");
+
+				file_readed_amount++;
+				if (file_readed_amount===2 || !sett_display_wordCheck) wowo_action_load();
 		    }
 		}
 
+	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
 	file_xml.open('GET', 'build/soluces.txt', true);
 	file_xml.send();
 }
@@ -93,6 +102,7 @@ if (sett_display_wordCheck)
 		{//on file state change
 		    if (file_xml.readyState==4 && file_xml.status==200) 
 			{//is finsih reading
+				console.log("[WOWO] [files] {words.txt} : reading... 2/3");
 				file_words=[];
 				const here_text_all=file_xml.responseText;
 				const here_text_lines=here_text_all.split("\n");
@@ -100,11 +110,17 @@ if (sett_display_wordCheck)
 				{
 					file_words.push(wowo_use_text_case(here_text_lines[i]));
 				}
+
+				console.log("[WOWO] [files] {words.txt} : reading... 3/3");
 		        console.log("[WOWO] [database] : all words :");
 		        console.log(file_words);
+
+				file_readed_amount++;
+				if (file_readed_amount===2) wowo_action_load();
 		    }
 		}
 
+	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
 	file_xml.open('GET', 'build/words.txt', true);
 	file_xml.send();
 }
@@ -380,37 +396,18 @@ setInterval(() => {
  * @public is dirrectly used by the HTML
  */
 function wowo_action_load()
+//executed when files are readed
 {
+	span_loading_end=new Date();
+	chat_add("readed");
+	file_readed=true;
 
-	chat_add("loading...");
-	
-	//initalisation
+	game_state=0;
 	wowo_display_load();
-
-	wowo_action_load_wait();
+	wowo_display_refresh();//depreciated
+	chat_add(`loading time : ${span_loading_end.getTime() - span_loading_begin.getTime()} ms`);
+	chat_add("ready!","magenta");
 }
-
-
-	function wowo_action_load_wait()
-	{
-		if (file_readed)
-		{
-			wowo_action_load_start();
-		}
-		else
-		{
-			console.log("[WOWO] [waiter] : waiting file read...");
-			setTimeout(wowo_action_load_wait,10);
-		}
-	}
-
-
-	function wowo_action_load_start()
-	{
-		game_state=0;
-		wowo_display_refresh();
-		chat_add("ready!","cyan");
-	}
 
 
 /**
