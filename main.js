@@ -16,6 +16,10 @@ const sett_display_wordCheck=true;//display if one of the two word is good. pref
  */
 let game_id=0;
 let game_state=-1;
+//-1 = loading
+//0 = menu
+//1 = game round
+//2 = end.
 
 /**
  * round variables :
@@ -397,7 +401,7 @@ function wowo_action_load()
 
 	function wowo_action_load_start()
 	{
-		wowo_game_restart();
+		game_state=0;
 		wowo_display_refresh();
 		chat_add("ready!","cyan");
 	}
@@ -516,7 +520,7 @@ function wowo_action_next()
 		wowo_game_end();
 		wowo_display_refresh();
 	} 
-	else if (game_state===2) 
+	else if (game_state===2 || game_state===0) 
 	{
 		wowo_game_restart();
 		wowo_display_refresh();

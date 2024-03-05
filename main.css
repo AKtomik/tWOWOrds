@@ -59,24 +59,24 @@ body {
 			color: #555555;
 
 			
-			font-size: 5vmin;
-			line-height: 5vmin;
+			font-size: 2.5vmax;
+			line-height: 2.5vmax;
 		}
 	}
 
 	
 	/* generals for item */
 	section {
-		line-height: 0vmin;
+		line-height: 0;
 		display: inline-block;
 		
 		background-color: rgb(13,17,23);
 		
 		section {
 			/*outline: solid 2px red; to debug*/
-			font-size: 10vmin;
+			font-size: 5vmax;
 			padding: 0px;
-			/*padding: 3vmin 3vw 3vmin 3vw;*/
+			/*padding: 3vmax 3vw 3vmax 3vw;*/
 			
 			display: flex;
 			justify-content: center;
@@ -112,14 +112,14 @@ body {
 		/* bar */
 		#shape_bars {
 			font-family: 'letters_words';
-			font-size: 10vmin;
+			font-size: 5vmax;
 
 			/*display: inline-block;*/
 
 			.bar_shape {
 				background-color: #ffffff;
-				width: 36vmin;
-				height: 1vmin;
+				width: 18vmax;
+				height: 1vmax;
 			}
 			.bar_text {
 				color: #999999;
@@ -135,12 +135,12 @@ body {
 				.bar_shape {
 					position: absolute;
 					left: 0px;
-					top: 0vmin;
+					top: 0vmax;
 				}
 				.bar_text {
 					position: absolute;
 					left: 0px;
-					top: -11vmin;/* slided */
+					top: -5vmax;/* slided */
 				}
 
 			}
@@ -155,12 +155,12 @@ body {
 				.bar_shape {
 					position: absolute;
 					right: 0px;
-					top: 11vmin;/* slided */
+					top: 11vmax;/* slided */
 				}
 				.bar_text {
 					position: absolute;
 					right: 0px;
-					top: 0vmin;
+					top: 0vmax;
 				}
 			}
 		}
@@ -172,7 +172,7 @@ body {
 		color: rgb(0,0,255);
 		
 		
-		font-size: 5vmin;
+		font-size: 5vmax;
 		
 		position:fixed;
 		bottom: 30px;
@@ -199,7 +199,7 @@ nav {
 
 	#msg_cat {
 		font-size:15px;
-		/*font-size:1vmin;*/
+		/*font-size:1vmax;*/
 		color:rgb(255,255,255);
 
 	}
