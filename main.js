@@ -300,7 +300,6 @@ function wowo_action_press(f_event)
 		if (here_key==="Enter")
 		{
 			{
-				here_found=true;
 				wowo_action_check();
 			}
 		}
@@ -354,6 +353,7 @@ function wowo_action_check()
 	if (game_round_answer.length!=3)
 	{
 		display_anim_badCheck=true;
+		wowo_display_refresh();
 	}
 	else if (!game_round_answer_wrong.includes(game_round_answer) && !game_round_answer_good.includes(game_round_answer))
 	{

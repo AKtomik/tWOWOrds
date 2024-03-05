@@ -78,13 +78,53 @@ body {
 
 	/* generals for item */
 	footer {
+
+
+		/* bar */
+		div {
+			font-family: 'letters_words';
+			font-size: 5vh;
+
+			/*display: inline-block;*/
+
+			.bar_left {
+				margin-left: 0;
+				margin-right: auto;
+				text-align: left;
+
+				color: #ffffff;
+			}
+			.bar_right {
+
+				margin-left: auto; 
+				margin-right: 0;
+				text-align: right;
+
+				color: #ffffff;
+			}
+
+			#shape_bar_left {
+				background-color: #ffffff;
+				width: 36vh;
+				height: 1vh;
+			}
+			#shape_bar_right {
+				background-color: #ffffff;
+				width: 36vh;
+				height: 1vh;
+			}
+
+		}
+
+
+
+		/* buttons */
 		outline: solid 2px purple; /* to debug */
 		
 		color: rgb(0,0,255);
 		
 		
 		font-size: 5vh;
-		padding: 3vmin;
 
 		justify-content: center;
 		text-align: center;
