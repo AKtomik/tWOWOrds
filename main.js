@@ -90,6 +90,12 @@ let display_element_question_right=0;
 let display_element_answers=0;
 let display_element_answer=[0,0,0];
 
+let display_element_bar_left_text=0;
+let display_element_bar_left_shape=0;
+let display_element_bar_right_text=0;
+let display_element_bar_right_shape=0;
+
+
 let display_anim_badCheck=false;
 
 
@@ -181,6 +187,14 @@ function wowo_game_isAnswer(f_str)
 }
 
 
+function wowo_game_isWord(f_str)
+{
+	for (let i=0;i<file_problems_keys.length;i++)
+		if (file_problems_keys[i]===f_str) return true;
+	return false;
+}
+
+
 //--- functions/display ---
 
 
@@ -196,6 +210,11 @@ function wowo_display_load()
 	display_element_answer[0]=document.getElementById("answer_1");
 	display_element_answer[1]=document.getElementById("answer_2");
 	display_element_answer[2]=document.getElementById("answer_3");
+	
+	display_element_bar_left_text=document.getElementById("bar_left_text");
+	display_element_bar_left_shape=document.getElementById("bar_left_shape");
+	display_element_bar_right_text=document.getElementById("bar_right_text");
+	display_element_bar_right_shape=document.getElementById("bar_right_shape");
 }
 
 function wowo_display_refresh()
@@ -203,7 +222,11 @@ function wowo_display_refresh()
 	display_element_question_left.innerHTML=game_round_problem_left;
 	display_element_question_right.innerHTML=game_round_problem_right;
 
+	display_element_bar_left_text.innerHTML=game_round_problem_left+game_round_answer;
+	display_element_bar_right_text.innerHTML=game_round_answer+game_round_problem_right;
+
 	here_color="#ffffff";
+	here_wrongDetails=false;
 	if (game_state===1)
 	{
 		if (game_round_answer_good.includes(game_round_answer))
@@ -212,6 +235,7 @@ function wowo_display_refresh()
 		}
 		else if (game_round_answer_wrong.includes(game_round_answer))
 		{
+			here_wrongDetails=true;
 			here_color="#ff0000";
 		}
 		else if (display_anim_badCheck)
@@ -233,6 +257,25 @@ function wowo_display_refresh()
 	}
 
 	display_element_answers.style.color=here_color;
+	
+	if (here_wrongDetails)
+	{
+		if (wowo_game_isWord(game_round_problem_left+game_round_answer))
+			display_element_bar_left_shape.style.backgroundColor="#009900";
+		else
+			display_element_bar_left_shape.style.backgroundColor="#990000";
+		
+		if (wowo_game_isWord(game_round_answer+game_round_problem_right))
+			display_element_bar_right_shape.style.backgroundColor="#009900";
+		else
+			display_element_bar_right_shape.style.backgroundColor="#990000";
+	}
+	else
+	{
+		display_element_bar_left_shape.style.backgroundColor=here_color;
+		display_element_bar_right_shape.style.backgroundColor=here_color;
+	}
+	
 	for (let i=0;i<display_element_answer.length;i++)
 	{
 		if (game_round_answer.length>i)

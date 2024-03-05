@@ -45,9 +45,9 @@ body {
 		
 		section {
 			outline: solid 2px red; /* to debug */
-			font-size: 10vh;
+			font-size: 10vmin;
 			padding: 0px;
-			/*padding: 3vh 3vw 3vh 3vw;*/
+			/*padding: 3vmin 3vw 3vmin 3vw;*/
 			
 			display: flex;
 			justify-content: center;
@@ -79,60 +79,79 @@ body {
 	/* generals for item */
 	footer {
 
+		outline: solid 2px purple; /* to debug */
 
 		/* bar */
-		div {
+		#shape_bars {
 			font-family: 'letters_words';
-			font-size: 5vh;
+			font-size: 10vmin;
 
 			/*display: inline-block;*/
 
-			.bar_left {
-				margin-left: 0;
-				margin-right: auto;
+			.bar_shape {
+				background-color: #ffffff;
+				width: 36vmin;
+				height: 1vmin;
+			}
+			.bar_text {
+				color: #999999;
+			}
+
+			#bar_left {
+				/*margin-left: 0;
+				margin-right: auto;*/
+				position: absolute;
+				left: 0px;
 				text-align: left;
 
-				color: #ffffff;
-			}
-			.bar_right {
+				.bar_shape {
+					position: absolute;
+					left: 0px;
+					top: 0vmin;
+				}
+				.bar_text {
+					position: absolute;
+					left: 0px;
+					top: -11vmin;/* slided */
+				}
 
-				margin-left: auto; 
-				margin-right: 0;
+			}
+
+			#bar_right {
+				/*margin-left: auto; 
+				margin-right: 0;*/
+				position: absolute;
+				right: 0px;
 				text-align: right;
 
-				color: #ffffff;
+				.bar_shape {
+					position: absolute;
+					right: 0px;
+					top: 11vmin;/* slided */
+				}
+				.bar_text {
+					position: absolute;
+					right: 0px;
+					top: 0vmin;
+				}
 			}
-
-			#shape_bar_left {
-				background-color: #ffffff;
-				width: 36vh;
-				height: 1vh;
-			}
-			#shape_bar_right {
-				background-color: #ffffff;
-				width: 36vh;
-				height: 1vh;
-			}
-
 		}
+	}
 
-
-
-		/* buttons */
-		outline: solid 2px purple; /* to debug */
+	/* buttons */
+	#buttons {
 		
 		color: rgb(0,0,255);
 		
 		
-		font-size: 5vh;
+		font-size: 5vmin;
+		
+		position:fixed;
+		bottom: 30px;
 
 		justify-content: center;
 		text-align: center;
 
-		position:relative;
-		top: 0%;
-		left: 50%;
-		transform: translate(-50%, -0%);
 
 		input {
 			padding: 0px;
@@ -152,7 +171,7 @@ nav {
 
 	#msg_cat {
 		font-size:15px;
-		/*font-size:1vh;*/
+		/*font-size:1vmin;*/
 		color:rgb(255,255,255);
 	}
 	#msg_the {
