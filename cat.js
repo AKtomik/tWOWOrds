@@ -1,6 +1,7 @@
 //--- initialization ---
 
 chat_messages=[]
+chat_element=document.getElementById("msg_cat");
 
 /**
  * add a message to the cat
@@ -29,8 +30,7 @@ function chat_display()
 		here_string+="</br>"+chat_messages[i];
 	}
 	
-	here_element=document.getElementById("msg_cat");
-	here_element.innerHTML=here_string;
+	chat_element.innerHTML=here_string;
 }
 
 

@@ -1,4 +1,5 @@
 //--- initialization ---
+//the script is loaded when the page is totaly loaded
 
 
 /**
@@ -114,19 +115,23 @@ if (sett_display_wordCheck)
  * changed only on load.
  * store each HTML element we will edit
  */
-//body
-let display_element_question_left=0;
-let display_element_question_right=0;
-let display_element_answer=0;
-//header
-let display_element_soluces=0;
-//footer
-let display_element_bar_left_text=0;
-let display_element_bar_left_shape=0;
-let display_element_bar_right_text=0;
-let display_element_bar_right_shape=0;
 
-let display_element_side_timer=0;
+//center elements
+let display_element_question_left=document.getElementById("question_left_0");
+let display_element_question_right=document.getElementById("question_right_0");
+let display_element_answer=document.getElementById("answer_0");
+
+//up elements
+let display_element_soluces=document.getElementById("soluces");
+
+//down elements
+let display_element_bar_left_text=document.getElementById("bar_left_text");
+let display_element_bar_left_shape=document.getElementById("bar_left_shape");
+let display_element_bar_right_text=document.getElementById("bar_right_text");
+let display_element_bar_right_shape=document.getElementById("bar_right_shape");
+
+//left elements
+let display_element_side_timer=document.getElementById("side_timer");
 
 
 let display_anim_badCheck=false;
@@ -262,22 +267,7 @@ function wowo_game_isWord(f_str)
  */
 function wowo_display_load()
 {
-	//getElementById must be used here, not before (else, HTML page isn't loaded)
-
-	//center elements
-	display_element_question_left=document.getElementById("question_left_0");
-	display_element_question_right=document.getElementById("question_right_0");
-	display_element_answer=document.getElementById("answer_0");
-	
-	display_element_soluces=document.getElementById("soluces");
-
-	//bar elements
-	display_element_bar_left_text=document.getElementById("bar_left_text");
-	display_element_bar_left_shape=document.getElementById("bar_left_shape");
-	display_element_bar_right_text=document.getElementById("bar_right_text");
-	display_element_bar_right_shape=document.getElementById("bar_right_shape");
-	
-	display_element_side_timer=document.getElementById("side_timer");
+	//elements are initialized on script load
 }
 
 
