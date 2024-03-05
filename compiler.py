@@ -78,21 +78,21 @@ while (program_run):
 
 
 			print(f"{prefix_action()} : sorting words... writting...")
-			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/dictionnaire6.txt","w") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/words.txt","w") as myfile:
 				for v in word_strip:
 					myfile.write(v)
 			print(f"{prefix_action()} : {len(word_strip)} words sorted!")
 
 	if (user_action==1 or user_action==4):#compile
 		
-		if (not os.path.isfile("./build/dictionnaire6.txt")):
+		if (not os.path.isfile("./build/words.txt")):
 			print(f"{prefix_action()} : cant find the sorted dictionnary!")
 		else:
 			
 			print(f"{prefix_action()} : compiling...")
 			print(f"{prefix_action()} : compiling... reading...")
 			
-			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/dictionnaire6.txt","r") as myfile:
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/words.txt","r") as myfile:
 				word_all=myfile.readlines()
 				#word_strip = [v for v in word_all if (len(v)==7)]
 				word_strip = [v.rstrip("\n") for v in word_all]
@@ -174,8 +174,8 @@ while (program_run):
 		if (not os.path.isdir("./build")):
 			print(f"{prefix_action()} : cant find build folder!")
 		else:
-			if (os.path.isfile("./build/dictionnaire6.txt")):
-				os.remove("./build/dictionnaire6.txt")
+			if (os.path.isfile("./build/words.txt")):
+				os.remove("./build/words.txt")
 			print(f"{prefix_action()} : clean!")
 	
 	if (user_action==1):#all

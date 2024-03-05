@@ -2,6 +2,10 @@
 
 chat_messages=[]
 
+/**
+ * add a message to the cat
+ * @param {string} f_msg the message
+ */
 function chat_add(f_msg)
 {
 	chat_messages.push(f_msg);
@@ -9,6 +13,9 @@ function chat_add(f_msg)
 	chat_display();
 }
 
+/**
+ * refresh the cat
+ */
 function chat_display()
 {
 	here_string=""
@@ -22,4 +29,6 @@ function chat_display()
 }
 
 
-//you say it's cHat ? yep, but i prefear cat, it's sounds better.
+//you say it's cHat ? 
+//no
+//cat it's sounds better.
