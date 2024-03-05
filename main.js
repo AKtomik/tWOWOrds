@@ -126,6 +126,8 @@ let display_element_bar_left_shape=0;
 let display_element_bar_right_text=0;
 let display_element_bar_right_shape=0;
 
+let display_element_side_timer=0;
+
 
 let display_anim_badCheck=false;
 
@@ -274,6 +276,8 @@ function wowo_display_load()
 	display_element_bar_left_shape=document.getElementById("bar_left_shape");
 	display_element_bar_right_text=document.getElementById("bar_right_text");
 	display_element_bar_right_shape=document.getElementById("bar_right_shape");
+	
+	display_element_side_timer=document.getElementById("side_timer");
 }
 
 
@@ -364,6 +368,18 @@ function wowo_display_refresh()
 	}
 	
 }
+
+let display_timer = 0;
+
+setInterval(() => {
+  let display_timer_m = parseInt(display_timer / 60, 10);
+  let display_timer_s = parseInt(display_timer % 60, 10);
+  display_timer_m = display_timer_m < 10 ? "0" + display_timer_m : display_timer_m;
+  display_timer_s = display_timer_s < 10 ? "0" + display_timer_s : display_timer_s;
+  display_element_side_timer.innerHTML = display_timer_m+":"+display_timer_s;
+  display_timer++;
+}, 1000);
+
 
 
 

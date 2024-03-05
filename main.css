@@ -104,6 +104,15 @@ body {
 	}
 
 
+	nav {
+		color: #0000ff;
+		#side_timer {
+			font-family: 'letters_words';
+			font-size: 5vmax;
+		}
+	}
+
+
 	/* generals for item */
 	footer {
 
