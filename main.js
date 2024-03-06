@@ -393,8 +393,8 @@ function wowo_display_refresh()
 		display_element_side_round_score.style.color="#555555";
 		
 		display_element_head_soluces.style.display="none";
-		display_element_head_title.style.display="inline-block";
-		display_element_head_subtitle.style.display="inline-block";
+		display_element_head_title.style.display="";
+		display_element_head_subtitle.style.display="";
 
 		//game_round_problem_left=game_round_answer;
 		//game_round_problem_right=game_round_answer;
@@ -404,7 +404,7 @@ function wowo_display_refresh()
 		{
 			display_element_head_subtitle.style.display="none";
 			display_element_head_title.style.display="none";
-			display_element_head_soluces.style.display="inline-block";
+			display_element_head_soluces.style.display="";
 			let here_string="";
 			if (game_state===2)
 			{

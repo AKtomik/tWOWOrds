@@ -49,6 +49,8 @@ body {
 		text-align: center;
 		font-family: 'letters_answer';
 
+		white-space: nowrap;
+
 
 		position:fixed;
 		top: 0%;
@@ -84,7 +86,7 @@ body {
 			color: #555555;
 
 			font-size: 2vmax;
-			line-height: 0vmax;
+			line-height: 1vmax;
 		}
 	}
 
