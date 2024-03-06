@@ -14,8 +14,8 @@ let span_timer_end=0;
  */
 const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
 //const sett_type_letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";//case sensive
-const sett_display_upper=true;//want we all upercase ? (change alphabet !)
-const sett_display_wordCheck=true;//display if one of the two word is good. preformances eater.
+const sett_display_upper=false;//want we all upercase ? (change alphabet !)
+const sett_display_wordCheck=true;//display if one of the two word is good. cool display.
 
 
 /**
@@ -45,7 +45,9 @@ let game_round_answer_wrong=[];
 /**
  * file variables :
  * in order to store all problems in a map variables.
- * like that file_problems["XXXYYY"]=[AAA(,BBB,...)]
+ * 
+ * data stored like that :
+ * file_problems["XXXYYY"]=[AAA(,BBB,...)]
  * where XXX is the begin of the first word
  * where YYY is the end of the second word
  * where AAA (and potentialy BBB) is (are) solutions of the problem
