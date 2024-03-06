@@ -223,11 +223,11 @@ function wowo_game_restart()
 	span_timer_begin=new Date();
 	
 	//messages
-	console.log("[WOWO] [round] : problem="+game_round_problem_key);
-	console.log("[WOWO] [round] : solutions=");
-	console.log(game_round_solutions);
 	chat_add("new round","cyan");
-	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
+	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+	console.log("[WOWO] [round] : hi cheater. here all solutions :");
+	console.log(game_round_solutions);
+	console.log("[WOWO] [round] : the problem="+game_round_problem_key);
 
 	//and change state
 	game_state=1;
@@ -243,7 +243,7 @@ function wowo_game_end()
 
 	//chat
 	chat_add("end round","cyan");
-	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
+	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 	
 	//and change state
 	game_state=2;
@@ -296,10 +296,40 @@ function wowo_game_isAnswer(f_str)
  */
 function wowo_game_isWord(f_str)
 {
-	//it's possible to find a better way to check
-	//the list is ordered
-	for (let i=0;i<file_words.length;i++)
-		if (file_words[i]===f_str) return true;
+	//classic way :
+	//you can check the whole list to find the word
+	//but it's possible to find a better way to check
+	//beacause the list is ordered, we can use the Binary Search algorithm.
+	//time...
+	//using classic way : ~1ms
+	//using Binary Search : ~0ms
+	//you can check by yourself :
+	
+
+	//for (let i=0;i<file_words.length;i++)	if (file_words[i]===f_str) return true;
+	//console.log(`search word ${f_str}`);
+	//let here_begin=Date.now();
+
+	{
+		here_min=0;
+		here_max=file_words.length-1;
+		here_loop=0;
+		//console.log(`checking ${f_str}`);
+		while (Math.abs(here_min-here_max) > 1 && here_loop<100000)
+		{
+			here_loop++;
+			here_index=here_min+Math.floor((here_max - here_min) / 2);
+			//console.log(`${here_index}  ${file_words[here_index]} (${here_min}-${here_max})`);
+			if (file_words[here_index]<f_str)
+				here_min=here_index;
+			else if (file_words[here_index]>f_str)
+				here_max=here_index;
+			else
+				return true;
+		}
+	}
+	
+	//console.log(`${Date.now() - here_begin} ms`);
 	return false;
 }
 
@@ -393,9 +423,6 @@ function wowo_display_refresh()
 	
 	if (here_wrongDetails && sett_display_wordCheck)
 	{
-		console.log("wowo_game_isWord(game_round_problem_left+game_round_answer)");
-		console.log(game_round_problem_left+game_round_answer);
-		console.log(wowo_game_isWord(game_round_problem_left+game_round_answer));
 		if (wowo_game_isWord(game_round_problem_left+game_round_answer))
 			display_element_bar_left_shape.style.backgroundColor="#009900";
 		else
@@ -562,12 +589,13 @@ function wowo_action_check()
 		if (wowo_game_isAnswer(game_round_answer))
 		{
 			game_round_answer_good.push(game_round_answer);
-			chat_add(game_round_answer+" : good try","green");
-			chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+			chat_add(`${game_round_answer} : good try`,"green");
 			if (game_round_answer_good.length===game_round_solutions.length)
 			{
 				chat_add("all found !","green");
 				wowo_game_end();
+			} else {
+				chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
