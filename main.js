@@ -1,4 +1,4 @@
-cat_add("chargement...");
+cat_add("chargement...","neg white bold");
 let span_loading_begin=Date.now();//new getting timespan for time difference
 let span_loading_end=0;
 let span_timer_begin=0;
@@ -19,6 +19,84 @@ const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
 const sett_display_upper=false;//want we all upercase ? (change alphabet !)
 const sett_display_wordCheck=true;//display if one of the two word is good. this display is cool.
 
+
+cat_add("lecture...","neg white");
+{
+	let file_xml = new XMLHttpRequest();
+	//ON : file finish reading
+	file_xml.onreadystatechange=function()
+		{//on file state change
+		    if (file_xml.readyState==4 && file_xml.status==200) 
+			{//is finsih reading
+				//cat_add("{soluces.txt} 2/3","dark gray");
+				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
+				file_problems={};
+				const here_text_all=file_xml.responseText;
+				const here_text_lines=here_text_all.split(sett_data_limit_new);
+				for (let i=0;i<here_text_lines.length;i++)
+				{
+					let here_list=here_text_lines[i].split(sett_data_limit_between);
+					let k=wowo_use_text_case(here_list[0]);
+					file_problems[k]=[];
+					for (let i=1;i<here_list.length;i++)
+					{
+						file_problems[k].push((wowo_use_text_case((here_list[i]))));
+						//must use begin because of the \r
+					}
+					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
+				}
+				file_problems_keys=Object.keys(file_problems);
+				
+				console.log("[WOWO] [files] {soluces.txt} : reading... 3/3");
+		        console.log("[WOWO] [database] : click there :");
+		        console.log(file_problems);
+		        console.log("[WOWO] [database] : or not.");
+				cat_add("lu : soluces.txt","dark gray");
+
+				file_readed_amount++;
+				if (file_readed_amount===2 || !sett_display_wordCheck) wowo_action_load();
+		    }
+		}
+
+	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
+	cat_add("lecture : soluces.txt","dark gray");
+	file_xml.open('GET', 'build/soluces.txt', true);
+	file_xml.send();
+}
+
+if (sett_display_wordCheck)
+{
+	let file_xml = new XMLHttpRequest();
+	//ON : file finish reading
+	file_xml.onreadystatechange=function()
+		{//on file state change
+		    if (file_xml.readyState==4 && file_xml.status==200) 
+			{//is finsih reading
+				//cat_add("{words.txt} 2/3","dark gray");
+				console.log("[WOWO] [files] {words.txt} : reading... 2/3");
+				file_words=[];
+				const here_text_all=file_xml.responseText;
+				const here_text_lines=here_text_all.split(sett_data_limit_new);
+				for (let i=0;i<here_text_lines.length;i++)
+				{
+					file_words.push((wowo_use_text_case(here_text_lines[i])));
+				}
+
+				console.log("[WOWO] [files] {words.txt} : reading... 3/3");
+		        console.log("[WOWO] [database] : all words :");
+		        console.log(file_words);
+				cat_add("lu : words.txt","dark gray");
+
+				file_readed_amount++;
+				if (file_readed_amount===2) wowo_action_load();
+		    }
+		}
+
+	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
+	cat_add("lecture : words.txt","dark gray");
+	file_xml.open('GET', 'build/words.txt', true);
+	file_xml.send();
+}
 
 /**
  * game variables :
@@ -53,6 +131,7 @@ let game_round_answer_wrong=[];
  * where XXX is the begin of the first word
  * where YYY is the end of the second word
  * where AAA (and potentialy BBB) is (are) solutions of the problem
+ * are dirrectly read from files
  */
 let file_problems={"empthy":["soo","lot"]};
 let file_problems_keys=["empthy"];//is needed to acces random key.
@@ -60,77 +139,7 @@ let file_words=["potato"];
 let file_readed=false;
 let file_readed_amount=0;
 
-cat_add("lecture...");
-{
-	let file_xml = new XMLHttpRequest();
-	//ON : file finish reading
-	file_xml.onreadystatechange=function()
-		{//on file state change
-		    if (file_xml.readyState==4 && file_xml.status==200) 
-			{//is finsih reading
-				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
-				file_problems={};
-				const here_text_all=file_xml.responseText;
-				const here_text_lines=here_text_all.split(sett_data_limit_new);
-				for (let i=0;i<here_text_lines.length;i++)
-				{
-					let here_list=here_text_lines[i].split(sett_data_limit_between);
-					let k=wowo_use_text_case(here_list[0]);
-					file_problems[k]=[];
-					for (let i=1;i<here_list.length;i++)
-					{
-						file_problems[k].push((wowo_use_text_case((here_list[i]))));
-						//must use begin because of the \r
-					}
-					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
-				}
-				file_problems_keys=Object.keys(file_problems);
-				
-				console.log("[WOWO] [files] {soluces.txt} : reading... 3/3");
-		        console.log("[WOWO] [database] : click there :");
-		        console.log(file_problems);
-		        console.log("[WOWO] [database] : or not.");
 
-				file_readed_amount++;
-				if (file_readed_amount===2 || !sett_display_wordCheck) wowo_action_load();
-		    }
-		}
-
-	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
-	file_xml.open('GET', 'build/soluces.txt', true);
-	file_xml.send();
-}
-
-if (sett_display_wordCheck)
-{
-	let file_xml = new XMLHttpRequest();
-	//ON : file finish reading
-	file_xml.onreadystatechange=function()
-		{//on file state change
-		    if (file_xml.readyState==4 && file_xml.status==200) 
-			{//is finsih reading
-				console.log("[WOWO] [files] {words.txt} : reading... 2/3");
-				file_words=[];
-				const here_text_all=file_xml.responseText;
-				const here_text_lines=here_text_all.split(sett_data_limit_new);
-				for (let i=0;i<here_text_lines.length;i++)
-				{
-					file_words.push((wowo_use_text_case(here_text_lines[i])));
-				}
-
-				console.log("[WOWO] [files] {words.txt} : reading... 3/3");
-		        console.log("[WOWO] [database] : all words :");
-		        console.log(file_words);
-
-				file_readed_amount++;
-				if (file_readed_amount===2) wowo_action_load();
-		    }
-		}
-
-	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
-	file_xml.open('GET', 'build/words.txt', true);
-	file_xml.send();
-}
 
 
 /**
@@ -684,14 +693,14 @@ function wowo_action_load()
 //executed when files are readed
 {
 	span_loading_end=Date.now();
-	cat_add("lu");
+	cat_add("fichiers lu","neg white");
 	file_readed=true;
 
 	wowo_game_menu();
 	//wowo_game_restart();
 	wowo_display_load();//depreciated
 	wowo_display_refresh();
-	cat_add(`temps de chargement : ${span_loading_end - span_loading_begin} ms`);
+	cat_add(`lecture et chargement : ${span_loading_end - span_loading_begin} ms`,"neg white bold");
 	cat_add("prêt !","magenta");
 }
 

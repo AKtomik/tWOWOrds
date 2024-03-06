@@ -272,35 +272,62 @@ aside {
 
 
 
-/* colorations */
-.red {
+/* -- colorations -- */
+/* you can edit them if you want */
+
+b {
 	font-weight: normal;
-	color: #ff0000;
+}
+/* primary */
+.red {
+	color: #f00;
 }
 .green {
-	font-weight: normal;
-	color: #00ff00;
+	color: #0f0;
 }
 .blue {
-	font-weight: normal;
-	color: #0000ff;
+	color: #00f;
 }
+
+/* secondary */
 .yellow {
-	font-weight: normal;
-	color: #ffff00;
+	color: #f00;
 }
 .cyan {
-	font-weight: normal;
-	color: #00ffff;
+	color: #0ff;
 }
 .magenta {
-	font-weight: normal;
-	color: #ff00ff;
+	color: #f0f;
+}
+
+/* black and white */
+.white {
+	color: #fff;
 }
 .gray {
-	font-weight: normal;
-	color: #555555;
+	color: #888;
 }
+.black {
+	color: #000;
+}
+
+.dark {
+	filter: brightness(50%);
+}
+.darker {
+	filter: brightness(25%);
+}
+.light {
+	filter: brightness(150%);
+}
+.lighter {
+	filter: brightness(175%);
+}
+
+/* special */
 .bold {
 	font-weight:bolder;
+}
+.neg {
+	mix-blend-mode: difference;
 }

@@ -175,9 +175,11 @@ while (program_run):
 		if (not os.path.isdir("./build")):
 			print(f"{prefix_action()} : cant find build folder!")
 		else:
-			if (os.path.isfile("./build/words.txt")):
-				os.remove("./build/words.txt")
+			#if (os.path.isfile("./build/words.txt")):
+			#	os.remove("./build/words.txt")
+			print(f"{prefix_action()} : (nothing to clean)")
 			print(f"{prefix_action()} : clean!")
+
 	
 	if (user_action==1):#all
 		print(f"{prefix_action()} : all actions finish! (time : {round((time()-time_begin)*1000000)/1000000}s)")
