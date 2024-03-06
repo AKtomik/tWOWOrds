@@ -46,11 +46,11 @@ function chat_display()
 	here_string=""
 	for (let i=chat_messages_index+1;i<chat_messages.length;i++)
 	{
-		here_string+="</br>a"+chat_messages[i];
+		here_string+="</br>"+chat_messages[i];
 	}
 	for (let i=0;i<=chat_messages_index;i++)
 	{
-		here_string+="</br>b"+chat_messages[i];
+		here_string+="</br>"+chat_messages[i];
 	}
 	
 	chat_element.innerHTML=here_string;
