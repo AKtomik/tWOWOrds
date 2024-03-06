@@ -1,4 +1,4 @@
-cat_add("loading...");
+cat_add("chargement...");
 let span_loading_begin=Date.now();//new getting timespan for time difference
 let span_loading_end=0;
 let span_timer_begin=0;
@@ -58,7 +58,7 @@ let file_words=["potato"];
 let file_readed=false;
 let file_readed_amount=0;
 
-cat_add("reading...");
+cat_add("lecture...");
 {
 	let file_xml = new XMLHttpRequest();
 	//ON : file finish reading
@@ -287,7 +287,7 @@ function wowo_game_restart()
 	span_timer_begin=new Date();
 	
 	//messages
-	cat_add("new round","cyan bold");
+	cat_add("nouvelle manche","cyan bold");
 	cat_add(`[${game_round_problem_left}[_]${game_round_problem_right}] (${game_round_solutions.length})`);
 	//cat_add(`${game_round_solutions.length} possibility${wowo_use_plural(game_round_solutions.length)}`);
 	console.log("[WOWO] [round] : hi cheater. here all solutions :");
@@ -310,7 +310,7 @@ function wowo_game_end()
 {
 
 	//cat
-	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found in ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"cyan");
+	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} trouvé${wowo_use_plural(game_round_answer_good.length)} en ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"cyan");
 	//cat_add("end round","gray");
 
 	//display
@@ -682,15 +682,15 @@ function wowo_action_load()
 //executed when files are readed
 {
 	span_loading_end=Date.now();
-	cat_add("readed");
+	cat_add("lu");
 	file_readed=true;
 
 	wowo_game_menu();
 	//wowo_game_restart();
 	wowo_display_load();//depreciated
 	wowo_display_refresh();
-	cat_add(`loading time : ${span_loading_end - span_loading_begin} ms`);
-	cat_add("ready!","magenta");
+	cat_add(`temps de chargement : ${span_loading_end - span_loading_begin} ms`);
+	cat_add("prêt !","magenta");
 }
 
 
@@ -775,7 +775,7 @@ function wowo_action_check()
 		if (wowo_game_isAnswer(game_round_answer))
 		{
 			game_round_answer_good.push(game_round_answer);
-			cat_add(`${game_round_answer} : good try`,"green");
+			cat_add(`${game_round_answer} : bonne réponse`,"green");
 			if (game_round_answer_good.length===game_round_solutions.length)
 			{
 				if (game_round_answer_wrong.length===0)
@@ -784,11 +784,11 @@ function wowo_action_check()
 					cat_add("all found !","green bold");
 				wowo_game_end();
 			} else {
-				cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found`);
+				cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} trouvé${wowo_use_plural(game_round_answer_good.length)}`);
 			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
-			cat_add(game_round_answer+" : wrong try","red");
+			cat_add(game_round_answer+" : mauvaise réponse","red");
 		}
 
 		if (here_edit)
