@@ -240,8 +240,6 @@ function wowo_game_restart()
  */
 function wowo_game_end()
 {
-	//actions
-	wowo_display_switch(0);
 
 	//chat
 	chat_add("end round","cyan");
@@ -249,6 +247,10 @@ function wowo_game_end()
 	
 	//and change state
 	game_state=2;
+
+	//actions
+	wowo_display_refresh();
+	wowo_display_switch(0);//the state must be changed before
 }
 
 /***
@@ -267,6 +269,9 @@ function wowo_game_menu()
 	
 	//and change state
 	game_state=0;
+
+	//actions
+	wowo_display_refresh();
 }
 
 
@@ -415,10 +420,14 @@ function wowo_display_switch(f_i)
 	if (game_state===2)
 	{
 		game_round_answer=game_round_solutions[f_i];
-		wowo_display();
-		f_i++;
-		if (!f_i<game_round_solutions.length) f_i=0;
-		setTimeout(wowo_display_switch(f_i),3000);
+		wowo_display_refresh();
+		
+		if (game_round_solutions.length>1)//avoid recursive for unic solution case
+		{
+			f_i++;
+			if (!(f_i<game_round_solutions.length)) f_i=0;
+			setTimeout(wowo_display_switch,1000,f_i);
+		}
 	}
 }
 
