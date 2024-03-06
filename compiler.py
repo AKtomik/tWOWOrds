@@ -75,6 +75,7 @@ while (program_run):
 				word_all=myfile.readlines()
 				word_strip = [v for v in word_all if (len(v.rstrip("\n"))==6)]
 				#print(word_strip)
+			
 
 
 			print(f"{prefix_action()} : sorting words... writting...")

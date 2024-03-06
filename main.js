@@ -12,10 +12,12 @@ let span_timer_end=0;
  * settings variables :
  * you can adjust them by yourself.
  */
+const sett_data_limit_new="\r\n";//the new line delimitation
+const sett_data_limit_between=" ";//the spacing character delimitation
 const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
 //const sett_type_letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";//case sensive
 const sett_display_upper=false;//want we all upercase ? (change alphabet !)
-const sett_display_wordCheck=true;//display if one of the two word is good. cool display.
+const sett_display_wordCheck=true;//display if one of the two word is good. this display is cool.
 
 
 /**
@@ -69,15 +71,15 @@ cat_add("lecture...");
 				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
 				file_problems={};
 				const here_text_all=file_xml.responseText;
-				const here_text_lines=here_text_all.split("\n");
+				const here_text_lines=here_text_all.split(sett_data_limit_new);
 				for (let i=0;i<here_text_lines.length;i++)
 				{
-					let here_list=here_text_lines[i].split(" ");
+					let here_list=here_text_lines[i].split(sett_data_limit_between);
 					let k=wowo_use_text_case(here_list[0]);
 					file_problems[k]=[];
 					for (let i=1;i<here_list.length;i++)
 					{
-						file_problems[k].push(wowo_use_text_case((here_list[i])));
+						file_problems[k].push((wowo_use_text_case((here_list[i]))));
 						//must use begin because of the \r
 					}
 					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
@@ -110,10 +112,10 @@ if (sett_display_wordCheck)
 				console.log("[WOWO] [files] {words.txt} : reading... 2/3");
 				file_words=[];
 				const here_text_all=file_xml.responseText;
-				const here_text_lines=here_text_all.split("\n");
+				const here_text_lines=here_text_all.split(sett_data_limit_new);
 				for (let i=0;i<here_text_lines.length;i++)
 				{
-					file_words.push(wowo_use_text_case(here_text_lines[i]));
+					file_words.push((wowo_use_text_case(here_text_lines[i])));
 				}
 
 				console.log("[WOWO] [files] {words.txt} : reading... 3/3");
@@ -781,7 +783,7 @@ function wowo_action_check()
 				if (game_round_answer_wrong.length===0)
 					cat_add("WOWO !","green bold");
 				else
-					cat_add("all found !","green bold");
+					cat_add("tout trouvé !","green bold");
 				wowo_game_end();
 			} else {
 				cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} trouvé${wowo_use_plural(game_round_answer_good.length)}`);
