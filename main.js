@@ -1,4 +1,4 @@
-chat_add("loading...");
+cat_add("loading...");
 let span_loading_begin=Date.now();//new getting timespan for time difference
 let span_loading_end=0;
 let span_timer_begin=0;
@@ -55,7 +55,7 @@ let file_words=["potato"];
 let file_readed=false;
 let file_readed_amount=0;
 
-chat_add("reading...");
+cat_add("reading...");
 {
 	let file_xml = new XMLHttpRequest();
 	//ON : file finish reading
@@ -223,8 +223,8 @@ function wowo_game_restart()
 	span_timer_begin=new Date();
 	
 	//messages
-	chat_add("new round","cyan");
-	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+	cat_add("new round","cyan");
+	cat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 	console.log("[WOWO] [round] : hi cheater. here all solutions :");
 	console.log(game_round_solutions);
 	console.log("[WOWO] [round] : the problem="+game_round_problem_key);
@@ -241,9 +241,9 @@ function wowo_game_restart()
 function wowo_game_end()
 {
 
-	//chat
-	chat_add("end round","cyan");
-	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+	//cat
+	cat_add("end round","cyan");
+	cat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 	
 	//and change state
 	game_state=2;
@@ -267,8 +267,8 @@ function wowo_game_menu()
 	//display
 	display_element_side_timer.innerHTML = "0.00";
 
-	//chat
-	chat_add("menu","cyan");
+	//cat
+	cat_add("menu","cyan");
 	
 	//and change state
 	game_state=0;
@@ -520,15 +520,15 @@ function wowo_action_load()
 //executed when files are readed
 {
 	span_loading_end=Date.now();
-	chat_add("readed");
+	cat_add("readed");
 	file_readed=true;
 
 	wowo_game_menu();
 	//wowo_game_restart();
 	wowo_display_load();
 	wowo_display_refresh();//depreciated
-	chat_add(`loading time : ${span_loading_end - span_loading_begin} ms`);
-	chat_add("ready!","magenta");
+	cat_add(`loading time : ${span_loading_end - span_loading_begin} ms`);
+	cat_add("ready!","magenta");
 }
 
 
@@ -613,17 +613,17 @@ function wowo_action_check()
 		if (wowo_game_isAnswer(game_round_answer))
 		{
 			game_round_answer_good.push(game_round_answer);
-			chat_add(`${game_round_answer} : good try`,"green");
+			cat_add(`${game_round_answer} : good try`,"green");
 			if (game_round_answer_good.length===game_round_solutions.length)
 			{
-				chat_add("all found !","green");
+				cat_add("all found !","green");
 				wowo_game_end();
 			} else {
-				chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+				cat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
-			chat_add(game_round_answer+" : wrong try","red");
+			cat_add(game_round_answer+" : wrong try","red");
 		}
 
 		if (here_edit)
