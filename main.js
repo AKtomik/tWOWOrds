@@ -411,8 +411,8 @@ function wowo_display_change(f_state)
 	if (f_state===0)
 	{
 		display_element_side_timer.innerHTML = "0.00";
-		display_element_side_round_div.innerHTML = "0";
-		display_element_side_round_score.innerHTML = "0";
+		display_element_side_round_div.innerHTML = "0 trouvé";
+		display_element_side_round_score.innerHTML = "rien à checher";
 
 		display_element_can_check.innerHTML="ENTRÉE : vérifier";
 		display_element_can_next.innerHTML="ESPACE : commencer";
@@ -506,7 +506,7 @@ function wowo_display_refresh()
 				here_color="#ffff00";
 			}
 			display_element_side_round_div.style.color=here_color;
-			display_element_side_round_div.innerHTML=`${game_round_answer_good.length}/${game_round_solutions.length} found`;
+			display_element_side_round_div.innerHTML=`${game_round_answer_good.length}/${game_round_solutions.length} trouvé${wowo_use_plural(game_round_answer_good.length)}`;
 		}
 		{//display side score
 			let here_color=0;
@@ -524,7 +524,7 @@ function wowo_display_refresh()
 			//	here_color="#ff0000";
 			//}
 			display_element_side_round_score.style.color=here_color;
-			display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} error${wowo_use_plural(game_round_answer_wrong.length)}`;
+			display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} erreur${wowo_use_plural(game_round_answer_wrong.length)}`;
 		}
 
 		//colors, verry specific to each cases
