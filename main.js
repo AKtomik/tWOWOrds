@@ -161,6 +161,11 @@ let display_element_side_round_score=document.getElementById("side_round_score")
 let display_element_can_next=document.getElementById("can_next");
 let display_element_can_check=document.getElementById("can_check");
 
+//block element
+let display_block_vertical=document.getElementById("screen_contain_vertical");
+let display_block_contain=document.getElementById("screen_contain");
+let display_block_side=document.getElementById("side");
+
 
 let display_anim_badCheck=false;
 
@@ -383,11 +388,17 @@ function wowo_game_isWord(f_str)
 
 
 /**
- * loading all elements used by displays fonctions
+ * display elements when all is loaded
  */
 function wowo_display_load()
 {
-	//elements are initialized on script load
+	display_block_vertical.style.backgroundColor="#000000";
+
+	display_block_vertical.addEventListener('transitionend', 
+	() => {
+		display_block_contain.style.opacity=1;
+		display_block_side.style.opacity=1;
+	});
 }
 
 
@@ -454,6 +465,7 @@ function wowo_display_change(f_state)
 function wowo_display_refresh()
 {
 
+	//in menu, the display_refresh is call a lot, but only a parth of the refresh is needed, so it's fine
 	if (game_state!=0)
 	{
 		{//display answers

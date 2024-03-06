@@ -17,7 +17,10 @@
 body {
 	background-color: rgb(255,255,255);
 #screen_contain_vertical { /* first box */
-	background-color: rgb(0,0,0);
+
+	background-color: rgb(255,255,255);
+    transition: background-color 2s;
+
 	position:fixed;
 	top:30px;
 	right:30px;
@@ -34,6 +37,9 @@ body {
 	transform: translate(-50%, -50%);
 
 #screen_contain { /* third box */
+
+	opacity: 0;
+    transition: opacity 2s;
 
 	background-color: rgb(255,255,255); /*to debug*/
 	/*outline: solid 2px blue; to debug*/
@@ -215,6 +221,9 @@ body {
 
 
 nav {
+	opacity: 0;
+    transition: opacity 3s;
+
 	color: #0000ff;
 
 	position:absolute;
