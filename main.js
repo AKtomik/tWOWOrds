@@ -412,6 +412,10 @@ function wowo_display_change(f_state)
 		display_element_side_timer.style.color="#555555";
 		display_element_side_round_div.style.color="#555555";
 		display_element_side_round_score.style.color="#555555";
+
+		display_element_answer.style.color="#aaaaaa";
+		display_element_bar_left_shape.style.backgroundColor="#555555";
+		display_element_bar_right_shape.style.backgroundColor="#555555";
 		
 		display_element_head_soluces.style.display="none";
 		display_element_head_title.style.display="";
@@ -452,7 +456,7 @@ function wowo_display_refresh()
 
 	if (game_state!=0)
 	{
-		{
+		{//display answers
 			let here_string="";
 			if (game_state===2)
 			{
@@ -475,7 +479,7 @@ function wowo_display_refresh()
 			display_element_head_soluces.innerHTML=here_string;
 		}
 
-		{
+		{//display side divison
 			let here_color=0;
 			if (game_round_answer_good.length===0)
 			{
@@ -490,8 +494,9 @@ function wowo_display_refresh()
 				here_color="#ffff00";
 			}
 			display_element_side_round_div.style.color=here_color;
+			display_element_side_round_div.innerHTML=`${game_round_answer_good.length}/${game_round_solutions.length} found`;
 		}
-		{
+		{//display side score
 			let here_color=0;
 			if (game_round_answer_wrong.length===0)
 			{
@@ -507,13 +512,67 @@ function wowo_display_refresh()
 			//	here_color="#ff0000";
 			//}
 			display_element_side_round_score.style.color=here_color;
+			display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} error${wowo_use_plural(game_round_answer_wrong.length)}`;
+		}
+
+		//colors, verry specific to each cases
+		{
+			here_color="#ffffff";
+			here_wrongDetails=false;
+			{
+				if (game_round_answer_good.includes(game_round_answer))
+				{
+					here_color="#00ff00";
+				}
+				else if (game_round_answer_wrong.includes(game_round_answer))
+				{
+					here_wrongDetails=true;
+					here_color="#ff0000";
+				}
+				else if (game_state===2)
+				{
+					here_color="#0000ff";
+				}
+				else if (display_anim_badCheck)
+				{
+					here_color="#ffaa00";
+				}
+				else if (game_state===1 && game_round_answer.length===3)
+				{
+					here_color="#ffff00";
+				}
+				else 
+				{
+					here_color="#aaaaaa";
+				}
+			}
+
+			display_element_answer.style.color=here_color;
+			
+			if (here_wrongDetails && sett_display_wordCheck)
+			{
+				if (wowo_game_isWord(game_round_problem_left+game_round_answer))
+					display_element_bar_left_shape.style.backgroundColor="#009900";
+				else
+					display_element_bar_left_shape.style.backgroundColor="#990000";
+				
+				if (wowo_game_isWord(game_round_answer+game_round_problem_right))
+					display_element_bar_right_shape.style.backgroundColor="#009900";
+				else
+					display_element_bar_right_shape.style.backgroundColor="#990000";
+			}
+			else
+			{
+				display_element_bar_left_shape.style.backgroundColor=here_color;
+				display_element_bar_right_shape.style.backgroundColor=here_color;
+			}
 		}
 	}
 
 
 
 	//just edit string
-	{
+	{//display answer
 		let here_string=game_round_answer;
 		for (let i=0;i<3-game_round_answer.length;i++)
 		{
@@ -521,72 +580,15 @@ function wowo_display_refresh()
 		}
 		display_element_answer.innerHTML=here_string;
 	}
-	{
+	{//display bar
 		let here_left=game_round_problem_left;
 		let here_right=game_round_problem_right;
-		//if (game_state===0)
-		//{//!!!
-		//	here_left=display_element_answer.innerHTML;
-		//	here_right=display_element_answer.innerHTML;
-		//}
 		display_element_question_left.innerHTML=here_left;
 		display_element_question_right.innerHTML=here_right;
 		display_element_bar_left_text.innerHTML=here_left+game_round_answer;
 		display_element_bar_right_text.innerHTML=game_round_answer+here_right;
-		display_element_side_round_div.innerHTML=`${game_round_answer_good.length}/${game_round_solutions.length} found`;
-		display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} error${wowo_use_plural(game_round_answer_wrong.length)}`;
 	}
 
-	//colors, verry specific to each cases
-	here_color="#ffffff";
-	here_wrongDetails=false;
-	{
-		if (game_round_answer_good.includes(game_round_answer))
-		{
-			here_color="#00ff00";
-		}
-		else if (game_round_answer_wrong.includes(game_round_answer))
-		{
-			here_wrongDetails=true;
-			here_color="#ff0000";
-		}
-		else if (game_state===2)
-		{
-			here_color="#0000ff";
-		}
-		else if (display_anim_badCheck)
-		{
-			here_color="#ffaa00";
-		}
-		else if (game_state===1 && game_round_answer.length===3)
-		{
-			here_color="#ffff00";
-		}
-		else 
-		{
-			here_color="#aaaaaa";
-		}
-	}
-
-	display_element_answer.style.color=here_color;
-	
-	if (here_wrongDetails && sett_display_wordCheck)
-	{
-		if (wowo_game_isWord(game_round_problem_left+game_round_answer))
-			display_element_bar_left_shape.style.backgroundColor="#009900";
-		else
-			display_element_bar_left_shape.style.backgroundColor="#990000";
-		
-		if (wowo_game_isWord(game_round_answer+game_round_problem_right))
-			display_element_bar_right_shape.style.backgroundColor="#009900";
-		else
-			display_element_bar_right_shape.style.backgroundColor="#990000";
-	}
-	else
-	{
-		display_element_bar_left_shape.style.backgroundColor=here_color;
-		display_element_bar_right_shape.style.backgroundColor=here_color;
-	}
 
 	
 }
