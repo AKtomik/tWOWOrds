@@ -1,7 +1,11 @@
 //--- initialization ---
 
 
-chat_messages=[]
+const chat_messages_max=10;//change it to whatever you want
+
+
+let chat_messages=[];
+let chat_messages_index=-1;
 chat_element=document.getElementById("msg_cat");
 
 /**
@@ -12,11 +16,25 @@ chat_element=document.getElementById("msg_cat");
 function chat_add(f_msg, f_style="")
 {
 	console.log("[WOWO] [cat] : "+f_msg);
+
 	if (f_style!="")
 	{
-		f_msg="<b class=\""+f_style+"\">"+f_msg+"</b>"
+		f_msg="<b class=\""+f_style+"\">"+f_msg+"</b>";
 	}
-	chat_messages.push(f_msg);
+
+	if (chat_messages.length<chat_messages_max)
+	{
+		chat_messages.push(f_msg);
+	}
+	else
+	{
+		chat_messages_index++;
+		if (!(chat_messages_index<chat_messages_max))
+		{
+			chat_messages_index=0;
+		}
+		chat_messages[chat_messages_index]=(f_msg);
+	}
 	chat_display();
 }
 
@@ -26,9 +44,13 @@ function chat_add(f_msg, f_style="")
 function chat_display()
 {
 	here_string=""
-	for (let i in chat_messages)
+	for (let i=chat_messages_index+1;i<chat_messages.length;i++)
 	{
-		here_string+="</br>"+chat_messages[i];
+		here_string+="</br>a"+chat_messages[i];
+	}
+	for (let i=0;i<=chat_messages_index;i++)
+	{
+		here_string+="</br>b"+chat_messages[i];
 	}
 	
 	chat_element.innerHTML=here_string;

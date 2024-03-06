@@ -240,6 +240,9 @@ function wowo_game_restart()
  */
 function wowo_game_end()
 {
+	//actions
+	wowo_display_switch(0);
+
 	//chat
 	chat_add("end round","cyan");
 	chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found");
@@ -329,12 +332,23 @@ function wowo_display_refresh()
 	}
 	{
 		here_string="";
-		for (let i=0;i<game_round_solutions.length;i++)
+		if (game_state===2)
 		{
-			if (game_round_answer_good.includes(game_round_solutions[i]))
-				here_string+="<b class=\"green\">"+game_round_solutions[i]+"</b></br>";
-			else
-				here_string+="<b>"+"???"+"</b></br>";
+			for (let i=0;i<game_round_solutions.length;i++)
+			{
+				if (game_round_answer_good.includes(game_round_solutions[i]))
+					here_string+="<b class=\"green\">"+game_round_solutions[i]+"</b></br>";
+				else
+					here_string+="<b class=\"blue\">"+game_round_solutions[i]+"</b></br>";
+			}
+		} else {
+			for (let i=0;i<game_round_solutions.length;i++)
+			{
+				if (game_round_answer_good.includes(game_round_solutions[i]))
+					here_string+="<b class=\"green\">"+game_round_solutions[i]+"</b></br>";
+				else
+					here_string+="<b>"+"???"+"</b></br>";
+			}
 		}
 	}
 	display_element_soluces.innerHTML=here_string;
@@ -342,7 +356,6 @@ function wowo_display_refresh()
 	//colors, verry specific to each cases
 	here_color="#ffffff";
 	here_wrongDetails=false;
-	if (game_state===1)
 	{
 		if (game_round_answer_good.includes(game_round_answer))
 		{
@@ -352,6 +365,10 @@ function wowo_display_refresh()
 		{
 			here_wrongDetails=true;
 			here_color="#ff0000";
+		}
+		else if (game_state===2)
+		{
+			here_color="#0000ff";
 		}
 		else if (display_anim_badCheck)
 		{
@@ -365,10 +382,6 @@ function wowo_display_refresh()
 		{
 			here_color="#aaaaaa";
 		}
-	}
-	else if (game_state===2)
-	{
-		here_color="#0000ff";
 	}
 
 	display_element_answer.style.color=here_color;
@@ -396,7 +409,19 @@ function wowo_display_refresh()
 	
 }
 
-let display_timer = 0;
+
+function wowo_display_switch(f_i)
+{
+	if (game_state===2)
+	{
+		game_round_answer=game_round_solutions[f_i];
+		wowo_display();
+		f_i++;
+		if (!f_i<game_round_solutions.length) f_i=0;
+		setTimeout(wowo_display_switch(f_i),3000);
+	}
+}
+
 
 setInterval(() => {
 	if (game_state===1)
