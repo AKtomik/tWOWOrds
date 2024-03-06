@@ -263,6 +263,9 @@ function wowo_game_menu()
 	game_round_answer="";
 	game_round_answer_good=[];
 	game_round_answer_wrong=[];
+	
+	//display
+	display_element_side_timer.innerHTML = "0.00";
 
 	//chat
 	chat_add("menu","cyan");
@@ -409,7 +412,7 @@ function wowo_display_refresh()
 		{
 			here_color="#ffaa00";
 		}
-		else if (game_round_answer.length===3)
+		else if (game_state===1 && game_round_answer.length===3)
 		{
 			here_color="#ffff00";
 		}
@@ -437,6 +440,29 @@ function wowo_display_refresh()
 	{
 		display_element_bar_left_shape.style.backgroundColor=here_color;
 		display_element_bar_right_shape.style.backgroundColor=here_color;
+	}
+
+	if (game_state===0)
+	{
+		display_element_side_timer.style.color="#555555";
+	} else if (game_state===1)
+	{
+		display_element_side_timer.style.color="#aaaaff";
+	} else if (game_state===2)
+	{
+		if (game_round_answer_good.length===0)
+		{
+			display_element_side_timer.style.color="#ff0000";
+		}
+		else if (game_round_answer_good.length===game_round_solutions.length)
+		{
+			display_element_side_timer.style.color="#00ff00";
+		}
+		else
+		{
+			display_element_side_timer.style.color="#ffff00";
+		}
+			//display_element_side_timer.style.color="#0000ff";
 	}
 	
 }
@@ -498,7 +524,7 @@ function wowo_action_load()
 	file_readed=true;
 
 	wowo_game_menu();
-	wowo_game_restart();
+	//wowo_game_restart();
 	wowo_display_load();
 	wowo_display_refresh();//depreciated
 	chat_add(`loading time : ${span_loading_end - span_loading_begin} ms`);
@@ -522,16 +548,14 @@ function wowo_action_press(f_event)
 			wowo_action_next();
 		}
 	}
-	else if (game_state===1)
+	else if (game_state===1 && here_key==="Enter")
 	{
-		
-		if (here_key==="Enter")
 		{
-			{
-				wowo_action_check();
-			}
+			wowo_action_check();
 		}
-
+	}
+	else if (game_state!=2)
+	{
 		if (here_key==="Backspace")
 		{
 			if (game_round_answer.length>0)
@@ -616,15 +640,20 @@ function wowo_action_check()
  */
 function wowo_action_next()
 {
-	if (game_state===1)
+	if (game_state===0)
+	{
+		wowo_game_restart();
+		wowo_display_refresh();
+	} 
+	else if (game_state===1) 
 	{
 		wowo_game_end();
 		wowo_display_refresh();
-	} 
-	else if (game_state===2 || game_state===0) 
+	}
+	else if (game_state===2) 
 	{
 		wowo_game_menu();
-		wowo_game_restart();
+		//wowo_game_restart();
 		wowo_display_refresh();
 	}
 }

@@ -1,7 +1,7 @@
 //--- initialization ---
 
 
-const chat_messages_max=10;//change it to whatever you want
+const chat_messages_max=50;//change it to whatever you want
 
 
 let chat_messages=[];
@@ -11,7 +11,7 @@ chat_element=document.getElementById("msg_cat");
 /**
  * add a message to the cat
  * @param {string} f_msg the message
- * @param {string} f_style the style for b
+ * @param {string} f_style the style for b (color)
  */
 function chat_add(f_msg, f_style="")
 {
