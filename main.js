@@ -1,6 +1,8 @@
 chat_add("loading...");
-let span_loading_begin=new Date();//getting timespan
+let span_loading_begin=Date.now();//new getting timespan for time difference
 let span_loading_end=0;
+let span_timer_begin=0;
+let span_timer_end=0;
 
 //--- initialization ---
 //the script is loaded when the page is totaly loaded
@@ -206,19 +208,19 @@ function wowo_use_text_case(f_str)
 
 /***
  * game round action : restart
+ * from state 0
+ * to state 1
  */
 function wowo_game_restart()
 {
-	//reset
-	game_round_answer="";
-	game_round_answer_good=[];
-	game_round_answer_wrong=[];
-
 	//choose the problem
 	game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
 	game_round_problem_left=wowo_use_text_case(wowo_use_text_begin(game_round_problem_key));
 	game_round_problem_right=wowo_use_text_case(wowo_use_text_end(game_round_problem_key));
 	game_round_solutions=file_problems[game_round_problem_key];
+	
+	//timer
+	span_timer_begin=new Date();
 	
 	//messages
 	console.log("[WOWO] [round] : problem="+game_round_problem_key);
@@ -234,6 +236,7 @@ function wowo_game_restart()
 
 /***
  * game round action : end
+ * to state 2 or 3
  */
 function wowo_game_end()
 {
@@ -243,6 +246,24 @@ function wowo_game_end()
 	
 	//and change state
 	game_state=2;
+}
+
+/***
+ * game round action : menu
+ * to state 0
+ */
+function wowo_game_menu()
+{
+	//reset
+	game_round_answer="";
+	game_round_answer_good=[];
+	game_round_answer_wrong=[];
+
+	//chat
+	chat_add("menu","cyan");
+	
+	//and change state
+	game_state=0;
 }
 
 
@@ -378,13 +399,26 @@ function wowo_display_refresh()
 let display_timer = 0;
 
 setInterval(() => {
-  let display_timer_m = parseInt(display_timer / 60, 10);
-  let display_timer_s = parseInt(display_timer % 60, 10);
-  display_timer_m = display_timer_m < 10 ? "0" + display_timer_m : display_timer_m;
-  display_timer_s = display_timer_s < 10 ? "0" + display_timer_s : display_timer_s;
-  display_element_side_timer.innerHTML = display_timer_m+":"+display_timer_s;
-  display_timer++;
-}, 1000);
+	if (game_state===1)
+	{
+		let here_time = Date.now() - span_timer_begin;//ms
+		let here_time_c = parseInt(here_time / 10 % 100, 10);//cs
+		let here_time_s = parseInt(here_time / 1000 % 60, 10);//s
+		let here_time_m = parseInt(here_time / 60000, 10);//m
+		//format
+		if (here_time_c < 10) here_time_c = "0" + here_time_c;
+		//here_time_c = here_time_c < 10 ? "0" + here_time_c : here_time_c;
+		if (here_time_m === 0)
+		{
+			here_time_m="";
+		} else {
+			if (here_time_s < 10) here_time_s = "0" + here_time_s;
+			here_time_m = here_time_m + ":";
+		}
+		
+		display_element_side_timer.innerHTML = here_time_m+here_time_s+"."+here_time_c;
+	}
+}, 10);
 
 
 
@@ -398,14 +432,15 @@ setInterval(() => {
 function wowo_action_load()
 //executed when files are readed
 {
-	span_loading_end=new Date();
+	span_loading_end=Date.now();
 	chat_add("readed");
 	file_readed=true;
 
-	game_state=0;
+	wowo_game_menu();
+	wowo_game_restart();
 	wowo_display_load();
 	wowo_display_refresh();//depreciated
-	chat_add(`loading time : ${span_loading_end.getTime() - span_loading_begin.getTime()} ms`);
+	chat_add(`loading time : ${span_loading_end - span_loading_begin} ms`);
 	chat_add("ready!","magenta");
 }
 
@@ -497,7 +532,8 @@ function wowo_action_check()
 			chat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
 			if (game_round_answer_good.length===game_round_solutions.length)
 			{
-				chat_add("TODO : all found");
+				chat_add("all found !","green");
+				wowo_game_end();
 			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);
@@ -525,6 +561,7 @@ function wowo_action_next()
 	} 
 	else if (game_state===2 || game_state===0) 
 	{
+		wowo_game_menu();
 		wowo_game_restart();
 		wowo_display_refresh();
 	}

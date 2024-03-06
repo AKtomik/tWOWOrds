@@ -103,16 +103,6 @@ body {
 
 	}
 
-
-	nav {
-		color: #0000ff;
-		#side_timer {
-			font-family: 'letters_words';
-			font-size: 5vmax;
-		}
-	}
-
-
 	/* generals for item */
 	footer {
 
@@ -196,8 +186,23 @@ body {
 	}
 }
 }
-}
+
+
 nav {
+	color: #0000ff;
+
+	position:absolute;
+	top: 50%;
+	left: 0px;
+	transform: translate(0%, -50%);
+	
+	#side_timer {
+		font-family: 'letters_words';
+		font-size: 5vmax;
+	}
+}
+
+aside {
 	position: absolute;
 	right:10px;
 	bottom:-40px;
@@ -217,6 +222,7 @@ nav {
 		color: rgb(13,17,23);
 	}
 
+}
 }
 }
 
