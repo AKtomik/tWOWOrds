@@ -44,6 +44,7 @@ function cat_add(f_msg, f_style="")
 function cat_display()
 {
 	here_string=""
+	//we use two loops to keep the cat ordered (regards the index)
 	for (let i=cat_messages_index+1;i<cat_messages.length;i++)
 	{
 		here_string+="</br>"+cat_messages[i];

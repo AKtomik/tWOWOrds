@@ -10,10 +10,11 @@ let span_timer_end=0;
 
 /**
  * settings variables :
- * you can adjust them.
+ * you can adjust them by yourself.
  */
 const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
-const sett_display_upper=false;
+//const sett_type_letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";//case sensive
+const sett_display_upper=true;//want we all upercase ? (change alphabet !)
 const sett_display_wordCheck=true;//display if one of the two word is good. preformances eater.
 
 
@@ -163,6 +164,7 @@ let display_anim_badCheck=false;
 
 
 //--- functions/use ---
+//useful functions
 
 
 /**
@@ -224,6 +226,38 @@ function wowo_use_plural(f_num,f_end="s")
 
 
 //--- functions/game ---
+//game function
+
+
+
+/***
+ * game round action : menu
+ * to state 0
+ */
+function wowo_game_menu()
+{
+	//reset
+	game_round_answer="";
+	game_round_answer_good=[];
+	game_round_answer_wrong=[];
+	//game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
+	game_round_problem_left="...";
+	game_round_problem_right="...";
+	//game_round_solutions=file_problems[game_round_problem_key];
+	
+	//display
+	wowo_display_change(0);
+
+	//cat
+	//cat_add("menu","gray");
+	
+	//and change state
+	game_state=0;
+
+	//actions
+	wowo_display_refresh();
+	wowo_display_blur();
+}
 
 
 /***
@@ -238,6 +272,9 @@ function wowo_game_restart()
 	game_round_problem_left=wowo_use_text_case(wowo_use_text_begin(game_round_problem_key));
 	game_round_problem_right=wowo_use_text_case(wowo_use_text_end(game_round_problem_key));
 	game_round_solutions=file_problems[game_round_problem_key];
+
+	//display
+	wowo_display_change(1);
 	
 	//timer
 	span_timer_begin=new Date();
@@ -260,7 +297,7 @@ function wowo_game_restart()
 
 /***
  * game round action : end
- * to state 2 or 3
+ * to state 2
  */
 function wowo_game_end()
 {
@@ -268,6 +305,9 @@ function wowo_game_end()
 	//cat
 	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found in ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"cyan");
 	//cat_add("end round","gray");
+
+	//display
+	wowo_display_change(2);
 	
 	//and change state
 	game_state=2;
@@ -275,37 +315,6 @@ function wowo_game_end()
 	//actions
 	wowo_display_refresh();
 	wowo_display_switch(0);//the state must be changed before
-}
-
-/***
- * game round action : menu
- * to state 0
- */
-function wowo_game_menu()
-{
-	//reset
-	game_round_answer="";
-	game_round_answer_good=[];
-	game_round_answer_wrong=[];
-	//game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
-	game_round_problem_left="...";
-	game_round_problem_right="...";
-	//game_round_solutions=file_problems[game_round_problem_key];
-	
-	//display
-	display_element_side_timer.innerHTML = "0.00";
-	display_element_side_round_div.innerHTML = "0";
-	display_element_side_round_score.innerHTML = "0";
-
-	//cat
-	//cat_add("menu","gray");
-	
-	//and change state
-	game_state=0;
-
-	//actions
-	wowo_display_refresh();
-	wowo_display_blur();
 }
 
 
@@ -330,20 +339,20 @@ function wowo_game_isAnswer(f_str)
  */
 function wowo_game_isWord(f_str)
 {
-	//classic way :
 	//you can check the whole list to find the word
 	//but it's possible to find a better way to check
-	//beacause the list is ordered, we can use the Binary Search algorithm.
-	//time...
-	//using classic way : ~1ms
-	//using Binary Search : ~0ms
+	//because the list is ordered, we can use the Binary Search algorithm.
+	//execution time is realy faster !
+	//time spend using classic way : ~1ms
+	//time spend using Binary Search : ~0ms
 	//you can check by yourself :
 	
-
+	//classic :
 	//for (let i=0;i<file_words.length;i++)	if (file_words[i]===f_str) return true;
 	//console.log(`search word ${f_str}`);
 	//let here_begin=Date.now();
 
+	//binary :
 	{
 		here_min=0;
 		here_max=file_words.length-1;
@@ -381,14 +390,17 @@ function wowo_display_load()
 
 
 /**
- * refresh the display
- * MUST be executed when a visible change is made
+ * apply display values each time you edit the game state
+ * @param {int} f_state the new game state
  */
-function wowo_display_refresh()
+function wowo_display_change(f_state)
 {
-
-	if (game_state===0)
+	if (f_state===0)
 	{
+		display_element_side_timer.innerHTML = "0.00";
+		display_element_side_round_div.innerHTML = "0";
+		display_element_side_round_score.innerHTML = "0";
+
 		display_element_can_check.innerHTML="ENTRÉE : vérifier";
 		display_element_can_next.innerHTML="ESPACE : commencer";
 		display_element_can_next.style.color="#aaaaaa";
@@ -402,32 +414,43 @@ function wowo_display_refresh()
 		display_element_head_soluces.style.display="none";
 		display_element_head_title.style.display="";
 		display_element_head_subtitle.style.display="";
-
-		//game_round_problem_left=game_round_answer;
-		//game_round_problem_right=game_round_answer;
 	}
-	else
+	if (f_state===1)
 	{
-		if (game_state===1)
-		{
-			display_element_can_check.innerHTML="ENTRÉE : vérifier";
-			display_element_can_next.innerHTML="ESPACE : abandonner";
-			display_element_can_next.style.color="#aaaaaa";
-			display_element_can_check.style.color="#aaaaaa";
-		}
-		else if (game_state===2)
-		{
-			display_element_can_check.innerHTML="ENTRÉE : vérifier";
-			display_element_can_next.innerHTML="ESPACE : menu";
-			display_element_can_next.style.color="#aaaaaa";
-			display_element_can_check.style.color="#555555";
-		}
+		display_element_can_check.innerHTML="ENTRÉE : vérifier";
+		display_element_can_next.innerHTML="ESPACE : abandonner";
+		display_element_can_next.style.color="#aaaaaa";
+		display_element_can_check.style.color="#aaaaaa";
+
+		display_element_side_timer.style.color="#aaaaaa";
+
+		display_element_head_subtitle.style.display="none";
+		display_element_head_title.style.display="none";
+		display_element_head_soluces.style.display="";
+	}
+	if (f_state===2)
+	{
+		display_element_can_check.innerHTML="ENTRÉE : vérifier";
+		display_element_can_next.innerHTML="ESPACE : menu";
+		display_element_can_next.style.color="#aaaaaa";
+		display_element_can_check.style.color="#555555";
+		
+		display_element_side_timer.style.color="#0000ff";
+	}
+}
 
 
+
+/**
+ * refresh the display
+ * MUST be executed when a visible change is made
+ */
+function wowo_display_refresh()
+{
+
+	if (game_state!=0)
+	{
 		{
-			display_element_head_subtitle.style.display="none";
-			display_element_head_title.style.display="none";
-			display_element_head_soluces.style.display="";
 			let here_string="";
 			if (game_state===2)
 			{
@@ -483,15 +506,6 @@ function wowo_display_refresh()
 			//}
 			display_element_side_round_score.style.color=here_color;
 		}
-		{
-			if (game_state===1)
-			{
-				display_element_side_timer.style.color="#aaaaff";
-			} else if (game_state===2)
-			{
-				display_element_side_timer.style.color="#0000ff";
-			}
-		}
 	}
 
 
@@ -518,7 +532,7 @@ function wowo_display_refresh()
 		display_element_bar_left_text.innerHTML=here_left+game_round_answer;
 		display_element_bar_right_text.innerHTML=game_round_answer+here_right;
 		display_element_side_round_div.innerHTML=`${game_round_answer_good.length}/${game_round_solutions.length} found`;
-		display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} error${wowo_use_plural(game_round_answer_good.length)}`;
+		display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} error${wowo_use_plural(game_round_answer_wrong.length)}`;
 	}
 
 	//colors, verry specific to each cases
@@ -575,8 +589,11 @@ function wowo_display_refresh()
 	
 }
 
-
-function wowo_display_switch(f_i)
+/**
+ * a recursive function to switch answer between solutions
+ * @param {int} f_i the solution index (nothing when first call)
+ */
+function wowo_display_switch(f_i=0)
 {
 	if (game_state===2)
 	{
@@ -592,7 +609,9 @@ function wowo_display_switch(f_i)
 	}
 }
 
-
+/**
+ * a recursive function to display random letters for LR problems
+ */
 function wowo_display_blur()
 {
 	if (game_state===0)
@@ -608,6 +627,10 @@ function wowo_display_blur()
 }
 
 
+/**
+ * for the timer
+ * executed each 10ms
+ */
 setInterval(() => {
 	if (game_state===1)
 	{
