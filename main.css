@@ -19,7 +19,7 @@ body {
 #screen_contain_vertical { /* first box */
 
 	background-color: rgb(255,255,255);
-    transition: background-color 2s;
+    /*transition: background-color 3s;*/
 
 	position:fixed;
 	top:30px;
@@ -39,7 +39,7 @@ body {
 #screen_contain { /* third box */
 
 	opacity: 0;
-    transition: opacity 2s;
+    /*transition: opacity 2s;*/
 
 	background-color: rgb(255,255,255); /*to debug*/
 	/*outline: solid 2px blue; to debug*/

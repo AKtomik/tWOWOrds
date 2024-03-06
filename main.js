@@ -18,6 +18,8 @@ const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
 //const sett_type_letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";//case sensive
 const sett_display_upper=false;//want we all upercase ? (change alphabet !)
 const sett_display_wordCheck=true;//display if one of the two word is good. this display is cool.
+const sett_display_transition_color=1;//must be >0 !
+const sett_display_transition_text=3;//must be >0 !
 
 
 cat_add("lecture...","neg white");
@@ -403,6 +405,11 @@ function wowo_game_isWord(f_str)
  */
 function wowo_display_load()
 {
+	
+    display_block_vertical.style.transition=`background-color ${sett_display_transition_color}s`;
+    display_block_contain.style.transition=`opacity ${sett_display_transition_text}s`;
+	display_block_side.style.transition=`opacity ${sett_display_transition_text}s`;
+
 	display_block_vertical.style.backgroundColor="#000000";
 
 	display_block_vertical.addEventListener('transitionend', 
