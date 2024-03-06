@@ -155,6 +155,8 @@ let display_element_side=document.getElementById("side");
 let display_element_side_timer=document.getElementById("side_timer");
 let display_element_side_round_div=document.getElementById("side_round_div");
 let display_element_side_round_score=document.getElementById("side_round_score");
+let display_element_can_next=document.getElementById("can_next");
+let display_element_can_check=document.getElementById("can_check");
 
 
 let display_anim_badCheck=false;
@@ -242,8 +244,8 @@ function wowo_game_restart()
 	
 	//messages
 	cat_add("new round","cyan bold");
-	cat_add(`[${game_round_problem_left}] _ [${game_round_problem_right}]`);
-	cat_add(`${game_round_solutions.length} possibility${wowo_use_plural(game_round_solutions.length)}`);
+	cat_add(`[${game_round_problem_left}[_]${game_round_problem_right}] (${game_round_solutions.length})`);
+	//cat_add(`${game_round_solutions.length} possibility${wowo_use_plural(game_round_solutions.length)}`);
 	console.log("[WOWO] [round] : hi cheater. here all solutions :");
 	console.log(game_round_solutions);
 	console.log("[WOWO] [round] : the problem="+game_round_problem_key);
@@ -387,6 +389,11 @@ function wowo_display_refresh()
 
 	if (game_state===0)
 	{
+		display_element_can_check.innerHTML="ENTRÉE : vérifier";
+		display_element_can_next.innerHTML="ESPACE : commencer";
+		display_element_can_next.style.color="#aaaaaa";
+		display_element_can_check.style.color="#555555";
+
 		display_element_side.style.color="#555555";
 		display_element_side_timer.style.color="#555555";
 		display_element_side_round_div.style.color="#555555";
@@ -401,6 +408,22 @@ function wowo_display_refresh()
 	}
 	else
 	{
+		if (game_state===1)
+		{
+			display_element_can_check.innerHTML="ENTRÉE : vérifier";
+			display_element_can_next.innerHTML="ESPACE : abandonner";
+			display_element_can_next.style.color="#aaaaaa";
+			display_element_can_check.style.color="#aaaaaa";
+		}
+		else if (game_state===2)
+		{
+			display_element_can_check.innerHTML="ENTRÉE : vérifier";
+			display_element_can_next.innerHTML="ESPACE : menu";
+			display_element_can_next.style.color="#aaaaaa";
+			display_element_can_check.style.color="#555555";
+		}
+
+
 		{
 			display_element_head_subtitle.style.display="none";
 			display_element_head_title.style.display="none";
@@ -716,7 +739,10 @@ function wowo_action_check()
 			cat_add(`${game_round_answer} : good try`,"green");
 			if (game_round_answer_good.length===game_round_solutions.length)
 			{
-				cat_add("all found !","green bold");
+				if (game_round_answer_wrong.length===0)
+					cat_add("WOWO !","green bold");
+				else
+					cat_add("all found !","green bold");
 				wowo_game_end();
 			} else {
 				cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found`);

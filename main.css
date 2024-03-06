@@ -229,6 +229,12 @@ nav {
 	#side_timer {
 		font-size: 5vmax;
 	}
+	#can_next {
+		font-size: 1vmax;
+	}
+	#can_check {
+		font-size: 1vmax;
+	}
 }
 
 aside {
