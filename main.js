@@ -206,6 +206,19 @@ function wowo_use_text_case(f_str)
 		return f_str.toLowerCase();
 }
 
+/**
+ * tool for conditionnaly display plural element
+ * @param {float} f_num the value to check
+ * @param {string} f_end the plural element
+ * @returns plural element if plural
+ */
+function wowo_use_plural(f_num,f_end="s")
+{
+	if (f_num<2)
+		return "";
+	else
+		return f_end;
+}
 
 
 //--- functions/game ---
@@ -229,7 +242,8 @@ function wowo_game_restart()
 	
 	//messages
 	cat_add("new round","cyan bold");
-	cat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+	cat_add(`[${game_round_problem_left}] _ [${game_round_problem_right}]`);
+	cat_add(`${game_round_solutions.length} possibility${wowo_use_plural(game_round_solutions.length)}`);
 	console.log("[WOWO] [round] : hi cheater. here all solutions :");
 	console.log(game_round_solutions);
 	console.log("[WOWO] [round] : the problem="+game_round_problem_key);
@@ -250,8 +264,8 @@ function wowo_game_end()
 {
 
 	//cat
-	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found in ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"yellow");
-	cat_add("end round","cyan bold");
+	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found in ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"cyan");
+	//cat_add("end round","gray");
 	
 	//and change state
 	game_state=2;
@@ -282,7 +296,7 @@ function wowo_game_menu()
 	display_element_side_round_score.innerHTML = "0";
 
 	//cat
-	cat_add("menu","cyan");
+	//cat_add("menu","gray");
 	
 	//and change state
 	game_state=0;
@@ -374,6 +388,9 @@ function wowo_display_refresh()
 	if (game_state===0)
 	{
 		display_element_side.style.color="#555555";
+		display_element_side_timer.style.color="#555555";
+		display_element_side_round_div.style.color="#555555";
+		display_element_side_round_score.style.color="#555555";
 		
 		display_element_head_soluces.style.display="none";
 		display_element_head_title.style.display="inline-block";
@@ -430,16 +447,17 @@ function wowo_display_refresh()
 			let here_color=0;
 			if (game_round_answer_wrong.length===0)
 			{
-				here_color="#aaaa00";
+				here_color="#aaaaaa";
 			}
-			else if (game_round_answer_wrong.length<10)
+			else 
+			//if (game_round_answer_wrong.length<10)
 			{
 				here_color="#ffaa00";
 			}
-			else
-			{
-				here_color="#ff0000";
-			}
+			//else
+			//{
+			//	here_color="#ff0000";
+			//}
 			display_element_side_round_score.style.color=here_color;
 		}
 		{
@@ -476,8 +494,8 @@ function wowo_display_refresh()
 		display_element_question_right.innerHTML=here_right;
 		display_element_bar_left_text.innerHTML=here_left+game_round_answer;
 		display_element_bar_right_text.innerHTML=game_round_answer+here_right;
-		display_element_side_round_div.innerHTML=game_round_answer_good.length+"/"+game_round_solutions.length+" found";
-		display_element_side_round_score.innerHTML=game_round_answer_wrong.length+" errors";
+		display_element_side_round_div.innerHTML=`${game_round_answer_good.length}/${game_round_solutions.length} found`;
+		display_element_side_round_score.innerHTML=`${game_round_answer_wrong.length} error${wowo_use_plural(game_round_answer_good.length)}`;
 	}
 
 	//colors, verry specific to each cases
@@ -701,7 +719,7 @@ function wowo_action_check()
 				cat_add("all found !","green bold");
 				wowo_game_end();
 			} else {
-				cat_add(game_round_answer_good.length+"/"+game_round_solutions.length+" found","yellow");
+				cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} found`);
 			}
 		} else {
 			game_round_answer_wrong.push(game_round_answer);

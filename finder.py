@@ -52,11 +52,25 @@ for k in read_problems:
 solutionAmount_list={}
 for k in read_problems:
 	for v in read_problems[k]:
-		solutionAmount_list[v]=True
+		try:
+			solutionAmount_list[v]
+		except:
+			solutionAmount_list[v]=1
+		else:
+			solutionAmount_list[v]+=1
+
+#big solution
+solutionPresent_i=0
+solutionPresent_v=0
+for k in solutionAmount_list:
+	if (solutionAmount_list[k]>solutionPresent_v):
+		solutionPresent_i=k
+		solutionPresent_v=solutionAmount_list[k]
 
 print(f"{prefix_action()} : searched!")
 
 print(f"[WOWO] [finder] : {total_problems} problems, with {total_soluce} solitions")
 print(f"[WOWO] [finder] : number of differents solutions : {len(solutionAmount_list)}")
+print(f"[WOWO] [finder] : the solution {solutionPresent_i} solves {solutionPresent_v} problems")
 print(f"[WOWO] [finder] : the bigest, with {biger_v} solutions : {biger_i}")
 print("[WOWO] [finder] : and that it.")

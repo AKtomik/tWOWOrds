@@ -280,6 +280,10 @@ aside {
 	font-weight: normal;
 	color: #ff00ff;
 }
+.gray {
+	font-weight: normal;
+	color: #555555;
+}
 .bold {
 	font-weight:bolder;
 }
