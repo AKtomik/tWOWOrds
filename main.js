@@ -236,6 +236,9 @@ function wowo_game_restart()
 
 	//and change state
 	game_state=1;
+
+	//actions
+	wowo_display_refresh();
 }
 
 
@@ -286,6 +289,7 @@ function wowo_game_menu()
 
 	//actions
 	wowo_display_refresh();
+	wowo_display_blur();
 }
 
 
@@ -463,11 +467,11 @@ function wowo_display_refresh()
 	{
 		let here_left=game_round_problem_left;
 		let here_right=game_round_problem_right;
-		if (game_state===0)
-		{//!!!
-			here_left=display_element_answer.innerHTML;
-			here_right=display_element_answer.innerHTML;
-		}
+		//if (game_state===0)
+		//{//!!!
+		//	here_left=display_element_answer.innerHTML;
+		//	here_right=display_element_answer.innerHTML;
+		//}
 		display_element_question_left.innerHTML=here_left;
 		display_element_question_right.innerHTML=here_right;
 		display_element_bar_left_text.innerHTML=here_left+game_round_answer;
@@ -543,6 +547,21 @@ function wowo_display_switch(f_i)
 			f_i++;
 			if (!(f_i<game_round_solutions.length)) f_i=0;
 			setTimeout(wowo_display_switch,1000,f_i);
+		}
+	}
+}
+
+
+function wowo_display_blur()
+{
+	if (game_state===0)
+	{
+		game_round_problem_left=sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)];
+		game_round_problem_right=sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)];
+		wowo_display_refresh();
+	
+		{
+			setTimeout(wowo_display_blur,100);
 		}
 	}
 }
