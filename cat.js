@@ -1,7 +1,7 @@
 //--- initialization ---
 
 
-const cat_messages_max=50;//change it to whatever you want
+const cat_messages_max=40;//change it to whatever you want
 
 
 let cat_messages=[];
