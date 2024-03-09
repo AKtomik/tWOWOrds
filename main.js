@@ -155,7 +155,7 @@ if (sett_game_wordCheck)
  * clear when reload (als all other)
  */
 let game_state=-1;
-let game_loopId=0;
+let game_recursiveId=0;
 //-1 = loading
 //0 = menu
 //1 = game round
@@ -712,8 +712,13 @@ function wowo_display_refresh()
  * a recursive function to switch answer between solutions
  * @param {int} f_i the solution index (nothing when first call)
  */
-function wowo_display_switch(f_i=0)
+function wowo_display_switch(f_i=0,f_id=0)
 {
+	if (f_id===0)
+	{
+		game_recursiveId++;
+		f_id=game_recursiveId;
+	}
 	if (game_state===2)
 	{
 		game_round_answer=game_round_solutions[f_i];
@@ -723,7 +728,7 @@ function wowo_display_switch(f_i=0)
 		{
 			f_i++;
 			if (!(f_i<game_round_solutions.length)) f_i=0;
-			setTimeout(wowo_display_switch,1000,f_i);
+			setTimeout(wowo_display_switch,1000,f_i,f_id);
 		}
 	}
 }
@@ -731,8 +736,13 @@ function wowo_display_switch(f_i=0)
 /**
  * a recursive function to display random letters for LR problems
  */
-function wowo_display_blur()
+function wowo_display_blur(f_id=0)
 {
+	if (f_id===0)
+	{
+		game_recursiveId++;
+		f_id=game_recursiveId;
+	}
 	if (game_state===0)
 	{
 		game_round_problem_left=sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)]+sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)]+sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)];
@@ -740,7 +750,7 @@ function wowo_display_blur()
 		wowo_display_refresh();
 	
 		{
-			setTimeout(wowo_display_blur,100);
+			setTimeout(wowo_display_blur,100,f_id);
 		}
 	}
 }
