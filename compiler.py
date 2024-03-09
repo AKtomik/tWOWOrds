@@ -23,11 +23,12 @@ time_begin=time()
 print("[WOWO] [compiler] : wich task have I todo?")
 print("| tasks:")
 print("| 0 - quit")
-print("| 1 - ALL (recomanded)")
+print("| 1 - ALL [recomanded]")
 print("| 2 - clean build folder")
 print("| 3 - sort dictionnary")
-print("| 4 - compile soluces")
-print("| 5 - cleanup temp file")
+print("| 4 - compile soluces (need 3)")
+print("| 5 - order soluces (need 4)")
+print("| 6 - cleanup temp file")
 
 program_run=True
 while (program_run):
@@ -168,8 +169,72 @@ while (program_run):
 			print(f"{prefix_action()} : {count_problem} problems, {count_soluces} solutions.")
 			print(f"{prefix_action()} : compiled!")
 
+
+	if (user_action==1 or user_action==5):#order from bigger to smaller
+		
+		if (not os.path.isfile("./build/soluces.txt")):
+			print(f"{prefix_action()} : cant find solutions!")
+		else:
 			
-	if (user_action==1 or user_action==5):#clean useless
+			print(f"{prefix_action()} : ordering...")
+			print(f"{prefix_action()} : ordering... reading...")
+			
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt","r") as myfile:
+				soluces_all=myfile.readlines()
+				soluces_strip = [v.rstrip("\n") for v in soluces_all]
+			
+			print(f"{prefix_action()} : ordering... prepare...")
+
+			maxlength=0
+			for v in soluces_strip:
+				here_length=0
+				for char in v:
+					if (char==" "):
+						here_length+=1
+				if (here_length>maxlength):
+					maxlength=here_length
+			print(f"{prefix_action()} : ordering... sizing... ("+str(maxlength)+")")
+			
+			save_lineslength=[]#all lines, by their length (length = number of solutions)
+			for i in range(0,maxlength+1):
+				save_lineslength.append([""])
+			
+
+
+			print(f"{prefix_action()} : ordering...")
+
+			index=0
+			for v in soluces_strip:
+				here_length=0
+				for char in v:
+					if (char==" "):
+						here_length+=1
+				index+=1
+				#save_lineslength[here_length].append(f"{here_length}_{index} -> {v}")
+				save_lineslength[here_length].append(v)
+
+			#print(f"--- {len(save_lineslength)} ---")
+			#for i1 in range(0,len(save_lineslength)):
+			#	print(f"{i1} = len( {len(save_lineslength[i1])} )")
+
+
+
+
+
+			print(f"{prefix_action()} : ordering... saving...")
+			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mode="w", encoding="utf-8") as myfile:
+				#writting
+				for i1 in range(0,len(save_lineslength)):
+					for v in save_lineslength[i1]:
+						if (v!=""):
+							myfile.write(v)
+							myfile.write("\n")
+			print(f"{prefix_action()} : ordering... saved!")
+
+
+
+
+	if (user_action==1 or user_action==6):#clean useless
 		
 		print(f"{prefix_action()} : cleanup...")
 		if (not os.path.isdir("./build")):

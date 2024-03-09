@@ -4,6 +4,7 @@ let span_loading_end=0;
 let span_timer_begin=0;
 let span_timer_end=0;
 
+
 //--- initialization ---
 //the script is loaded when the page is totaly loaded
 
@@ -12,14 +13,48 @@ let span_timer_end=0;
  * settings variables :
  * you can adjust them by yourself.
  */
+const sett_game_wordCheck=true;//display if one of the two word is good. this display is cool.
+const sett_game_optionLength=true;//the player can change length
+
 const sett_data_limit_new="\r\n";//the new line delimitation
+//when compiled on windows : "\n"
+//when compiled on linux : "\r\n" (yes, I tried it)
 const sett_data_limit_between=" ";//the spacing character delimitation
-const sett_type_letters="abcdefghijklmnopqrstuvwxyz";//case sensive
-//const sett_type_letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";//case sensive
+
+const sett_type_alphabet="abcdefghijklmnopqrstuvwxyz";//case sensive
+//const sett_type_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";//case sensive
 const sett_display_upper=false;//want we all upercase ? (change alphabet !)
-const sett_display_wordCheck=true;//display if one of the two word is good. this display is cool.
 const sett_display_transition_color=1;//must be >0 !
 const sett_display_transition_text=3;//must be >0 !
+
+
+/**
+ * file variables :
+ * in order to store all problems in a map variables.
+ * 
+ * data stored like that :
+ * file_problems["XXXYYY"]=[AAA(,BBB,...)]
+ * where XXX is the begin of the first word
+ * where YYY is the end of the second word
+ * where AAA (and potentialy BBB) is (are) solutions of the problem
+ * are dirrectly read from files
+ */
+let file_problems={"empthy":["soo","lot"]};
+let file_problems_keys=["empthy"];//is needed to acces random key.
+let file_words=["potato"];
+let file_readed=false;
+let file_readed_amount=0;
+
+//soluces lenght (solucesL)
+let file_solucesL_Min=0;//min soluce length
+let file_solucesL_Max=0;//max soluce length
+
+let file_solucesL_border=[];//index of each limit of soluce length
+//[ 0 , {file_solucesALimit[0]} [ = all problems with 0 solution
+//[ {file_solucesALimit[0]} , {file_solucesALimit[2]} [ = all problems with 1 solution
+//[ {file_solucesALimit[1]} , {file_solucesALimit[2]} [ = all problems with 2 solutions
+//...
+//[ {file_solucesALimit[n-1]} , {file_solucesALimit[n]} [ = all problems with n solutions
 
 
 cat_add("lecture...","neg white");
@@ -33,21 +68,31 @@ cat_add("lecture...","neg white");
 				//cat_add("{soluces.txt} 2/3","dark gray");
 				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
 				file_problems={};
+				file_solucesL_Max=0;
 				const here_text_all=file_xml.responseText;
 				const here_text_lines=here_text_all.split(sett_data_limit_new);
 				for (let i=0;i<here_text_lines.length;i++)
 				{
 					let here_list=here_text_lines[i].split(sett_data_limit_between);
+					let here_length=here_list.length-1;
+					while (here_length>file_solucesL_Max)
+					{
+						file_solucesL_border[file_solucesL_Max]=i;
+						file_solucesL_Max++;
+					}
 					let k=wowo_use_text_case(here_list[0]);
 					file_problems[k]=[];
-					for (let i=1;i<here_list.length;i++)
+					for (let i=1;i<(here_length+1);i++)
 					{
 						file_problems[k].push((wowo_use_text_case((here_list[i]))));
-						//must use begin because of the \r
 					}
 					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
 				}
 				file_problems_keys=Object.keys(file_problems);
+
+				file_solucesL_border[file_solucesL_Max]=(here_text_lines.length - 1);
+				file_solucesL_Min=file_problems[file_problems_keys[0]].length;
+				game_option_minSoluces=file_solucesL_Min-1;
 				
 				console.log("[WOWO] [files] {soluces.txt} : reading... 3/3");
 		        console.log("[WOWO] [database] : click there :");
@@ -55,8 +100,13 @@ cat_add("lecture...","neg white");
 		        console.log("[WOWO] [database] : or not.");
 				cat_add("lu : soluces.txt","dark gray");
 
+				for (let i=0;i<file_solucesL_border.length;i++)
+				{
+					console.log(`${i} : ${file_solucesL_border[i]}`);
+				}
+
 				file_readed_amount++;
-				if (file_readed_amount===2 || !sett_display_wordCheck) wowo_action_load();
+				if (file_readed_amount===2 || !sett_game_wordCheck) wowo_action_load();
 		    }
 		}
 
@@ -66,7 +116,7 @@ cat_add("lecture...","neg white");
 	file_xml.send();
 }
 
-if (sett_display_wordCheck)
+if (sett_game_wordCheck)
 {
 	let file_xml = new XMLHttpRequest();
 	//ON : file finish reading
@@ -104,8 +154,8 @@ if (sett_display_wordCheck)
  * game variables :
  * clear when reload (als all other)
  */
-//let game_id=0;
 let game_state=-1;
+let game_loopId=0;
 //-1 = loading
 //0 = menu
 //1 = game round
@@ -124,23 +174,12 @@ let game_round_answer="";
 let game_round_answer_good=[];
 let game_round_answer_wrong=[];
 
-/**
- * file variables :
- * in order to store all problems in a map variables.
- * 
- * data stored like that :
- * file_problems["XXXYYY"]=[AAA(,BBB,...)]
- * where XXX is the begin of the first word
- * where YYY is the end of the second word
- * where AAA (and potentialy BBB) is (are) solutions of the problem
- * are dirrectly read from files
- */
-let file_problems={"empthy":["soo","lot"]};
-let file_problems_keys=["empthy"];//is needed to acces random key.
-let file_words=["potato"];
-let file_readed=false;
-let file_readed_amount=0;
 
+/**
+ * options variables :
+ * editable in game
+ */
+let game_option_minSoluces=-2;
 
 
 
@@ -173,6 +212,10 @@ let display_element_side_round_div=document.getElementById("side_round_div");
 let display_element_side_round_score=document.getElementById("side_round_score");
 let display_element_can_next=document.getElementById("can_next");
 let display_element_can_check=document.getElementById("can_check");
+let display_element_can_up=document.getElementById("can_up");
+let display_element_can_down=document.getElementById("can_down");
+
+let display_element_opt_soluces=document.getElementById("option_soluces");
 
 //block element
 let display_block_vertical=document.getElementById("screen_contain_vertical");
@@ -287,8 +330,21 @@ function wowo_game_menu()
  */
 function wowo_game_restart()
 {
-	//choose the problem
-	game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
+	//choose the key
+	{
+		let here_down=file_solucesL_border[file_solucesL_Min-1];
+		let here_up=file_solucesL_border[file_solucesL_Max];
+		if (game_option_minSoluces!=file_solucesL_Min-1)
+		{
+			here_down=file_solucesL_border[game_option_minSoluces-1];
+			here_up=file_solucesL_border[game_option_minSoluces];
+		}
+		console.log(`[WOWO] [round] : key is between index ${here_down} and ${here_up}`)
+		game_round_problem_key=file_problems_keys[wowo_use_rickroll(here_up-here_down)+here_down];
+	}
+	
+
+	//deduct the problem
 	game_round_problem_left=wowo_use_text_case(wowo_use_text_begin(game_round_problem_key));
 	game_round_problem_right=wowo_use_text_case(wowo_use_text_end(game_round_problem_key));
 	game_round_solutions=file_problems[game_round_problem_key];
@@ -427,48 +483,62 @@ function wowo_display_load()
 function wowo_display_change(f_state)
 {
 	if (f_state===0)
-	{
+	{//when enter game
+		display_element_can_check.innerHTML="ENTRÉE : vérifier";
+		display_element_can_down.style.color="#bbb";
+		display_element_can_up.style.color="#bbb";
+	}
+	if (f_state===0)
+	{//when going to menu
 		display_element_side_timer.innerHTML = "0.00";
 		display_element_side_round_div.innerHTML = "0 trouvé";
 		display_element_side_round_score.innerHTML = "rien à checher";
 
-		display_element_can_check.innerHTML="ENTRÉE : vérifier";
 		display_element_can_next.innerHTML="ESPACE : commencer";
-		display_element_can_next.style.color="#aaaaaa";
-		display_element_can_check.style.color="#555555";
+		display_element_can_next.style.color="#ff0";
+		display_element_can_check.style.color="#555";
 
-		display_element_side.style.color="#555555";
-		display_element_side_timer.style.color="#555555";
-		display_element_side_round_div.style.color="#555555";
-		display_element_side_round_score.style.color="#555555";
+		display_element_can_down.innerHTML="FLECHE HAUT : augmenter";
+		display_element_can_up.innerHTML="FLECHE BAS : baisser";
+		display_element_can_down.style.display="";
+		display_element_can_up.style.display="";
+		display_element_opt_soluces.style.display="";
 
-		display_element_answer.style.color="#aaaaaa";
-		display_element_bar_left_shape.style.backgroundColor="#555555";
-		display_element_bar_right_shape.style.backgroundColor="#555555";
+
+		display_element_side.style.color="#555";
+		display_element_side_timer.style.color="#555";
+		display_element_side_round_div.style.color="#555";
+		display_element_side_round_score.style.color="#555";
+
+		display_element_answer.style.color="#bbb";
+		display_element_bar_left_shape.style.backgroundColor="#555";
+		display_element_bar_right_shape.style.backgroundColor="#555";
 		
 		display_element_head_soluces.style.display="none";
 		display_element_head_title.style.display="";
 		display_element_head_subtitle.style.display="";
 	}
 	if (f_state===1)
-	{
-		display_element_can_check.innerHTML="ENTRÉE : vérifier";
+	{//when going to game
+		display_element_side_timer.style.color="#aaaaaa";
+
 		display_element_can_next.innerHTML="ESPACE : abandonner";
 		display_element_can_next.style.color="#aaaaaa";
 		display_element_can_check.style.color="#aaaaaa";
-
-		display_element_side_timer.style.color="#aaaaaa";
+		
+		display_element_can_down.style.display="none";
+		display_element_can_up.style.display="none";
+		display_element_opt_soluces.style.display="none";
 
 		display_element_head_subtitle.style.display="none";
 		display_element_head_title.style.display="none";
 		display_element_head_soluces.style.display="";
 	}
 	if (f_state===2)
-	{
-		display_element_can_check.innerHTML="ENTRÉE : vérifier";
+	{//when going to win
 		display_element_can_next.innerHTML="ESPACE : menu";
 		display_element_can_next.style.color="#aaaaaa";
-		display_element_can_check.style.color="#555555";
+		display_element_can_check.style.color="#555";
 		
 		display_element_side_timer.style.color="#0000ff";
 	}
@@ -579,7 +649,7 @@ function wowo_display_refresh()
 
 			display_element_answer.style.color=here_color;
 			
-			if (here_wrongDetails && sett_display_wordCheck)
+			if (here_wrongDetails && sett_game_wordCheck)
 			{
 				if (wowo_game_isWord(game_round_problem_left+game_round_answer))
 					display_element_bar_left_shape.style.backgroundColor="#009900";
@@ -597,6 +667,21 @@ function wowo_display_refresh()
 				display_element_bar_right_shape.style.backgroundColor=here_color;
 			}
 		}
+	} else {
+		if (game_option_minSoluces===(file_solucesL_Min-1))
+			display_element_opt_soluces.innerHTML=`aléatoire`;
+		else
+			display_element_opt_soluces.innerHTML=`${game_option_minSoluces} solution${wowo_use_plural(game_option_minSoluces)}`;
+
+		if (game_option_minSoluces>=file_solucesL_Min)
+			display_element_can_up.style.color="#aaa";
+		else
+			display_element_can_up.style.color="#555";
+
+		if (game_option_minSoluces<file_solucesL_Max)
+			display_element_can_down.style.color="#aaa";
+		else
+			display_element_can_down.style.color="#555";
 	}
 
 
@@ -650,8 +735,8 @@ function wowo_display_blur()
 {
 	if (game_state===0)
 	{
-		game_round_problem_left=sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)];
-		game_round_problem_right=sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)]+sett_type_letters[wowo_use_rickroll(sett_type_letters.length)];
+		game_round_problem_left=sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)]+sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)]+sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)];
+		game_round_problem_right=sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)]+sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)]+sett_type_alphabet[wowo_use_rickroll(sett_type_alphabet.length)];
 		wowo_display_refresh();
 	
 		{
@@ -719,13 +804,36 @@ function wowo_action_load()
 function wowo_action_press(f_event)
 {
 	let here_key=String(f_event.key);
-	let here_found=false;
+	let here_refresh=false;
 	
 	if (here_key===" ")
 	{
 		{
-			here_found=true;
+			here_refresh=true;
 			wowo_action_next();
+		}
+	}
+	else if (game_state==0 && here_key.slice(0,5)==="Arrow")
+	{
+		if (here_key==="ArrowUp")
+		{
+			if (game_option_minSoluces<file_solucesL_Max)
+			{
+				here_refresh=true;
+				do {
+					game_option_minSoluces++;
+				} while (file_solucesL_border[game_option_minSoluces-1]===file_solucesL_border[game_option_minSoluces])
+			}
+		}
+		if (here_key==="ArrowDown")
+		{
+			if (game_option_minSoluces>=file_solucesL_Min)
+			{
+				here_refresh=true;
+				do {
+					game_option_minSoluces--;
+				} while (file_solucesL_border[game_option_minSoluces-1]===file_solucesL_border[game_option_minSoluces])
+			}
 		}
 	}
 	else if (game_state===1 && here_key==="Enter")
@@ -741,7 +849,7 @@ function wowo_action_press(f_event)
 			if (game_round_answer.length>0)
 			{
 				game_round_answer=game_round_answer.slice(0,game_round_answer.length-1);
-				here_found=true;
+				here_refresh=true;
 				display_anim_badCheck=false;
 			}
 		}
@@ -749,14 +857,14 @@ function wowo_action_press(f_event)
 		else if (here_key.length===1)
 		{
 			here_key=wowo_use_text_case(here_key);
-			for (let char in sett_type_letters)
+			for (let char in sett_type_alphabet)
 			{
-				if (sett_type_letters[char]===here_key)
+				if (sett_type_alphabet[char]===here_key)
 				{
-					here_found=true;
+					here_refresh=true;
 				}
 			}
-			if (here_found) 
+			if (here_refresh) 
 			{
 				if (game_round_answer.length<3)
 				{
@@ -766,7 +874,7 @@ function wowo_action_press(f_event)
 			}
 		}
 
-		if (here_found) 
+		if (here_refresh) 
 		{
 			wowo_display_refresh();
 		}

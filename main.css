@@ -227,9 +227,12 @@ nav {
 	color: #0000ff;
 
 	position:absolute;
-	top: 50%;
+	top: 0%;
 	left: 0px;
+	/*
+	top: 50%;
 	transform: translate(0%, -50%);
+	*/
 
 	padding-left: 5vmax;
 	
@@ -238,11 +241,12 @@ nav {
 	#side_timer {
 		font-size: 5vmax;
 	}
-	#can_next {
+	.can {
 		font-size: 1vmax;
 	}
-	#can_check {
-		font-size: 1vmax;
+	#option_soluces {
+		font-size: 2vmax;
+		color:#bbb;
 	}
 }
 
