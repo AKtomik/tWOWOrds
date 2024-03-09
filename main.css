@@ -19,7 +19,7 @@ body {
 #screen_contain_vertical { /* first box */
 
 	background-color: rgb(255,255,255);
-    /*transition: background-color 3s;*/
+    transition: background-color 10s;
 
 	position:fixed;
 	top:30px;
@@ -39,7 +39,7 @@ body {
 #screen_contain { /* third box */
 
 	opacity: 0;
-    /*transition: opacity 2s;*/
+    transition: opacity 10s;
 
 	background-color: rgb(255,255,255); /*to debug*/
 	/*outline: solid 2px blue; to debug*/
@@ -222,7 +222,7 @@ body {
 
 nav {
 	opacity: 0;
-    transition: opacity 3s;
+    transition: opacity 10s;
 
 	color: #0000ff;
 
@@ -295,7 +295,7 @@ b {
 
 /* secondary */
 .yellow {
-	color: #f00;
+	color: #ff0;
 }
 .cyan {
 	color: #0ff;
@@ -330,6 +330,9 @@ b {
 
 /* special */
 .bold {
+	font-weight:bold;
+}
+.bolder {
 	font-weight:bolder;
 }
 .neg {

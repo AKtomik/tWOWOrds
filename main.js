@@ -13,8 +13,11 @@ let span_timer_end=0;
  * settings variables :
  * you can adjust them by yourself.
  */
-const sett_game_wordCheck=true;//display if one of the two word is good. this display is cool.
-const sett_game_optionLength=true;//the player can change length
+const sett_debug=true;//try to find common problems
+let sett_game_wordCheck=true;//display if one of the two word is good.
+//automatically disabled if [words6.txt] didnt exist
+let sett_game_optionLength=true;//the player can change length
+//automatically disabled if [soluces.txt] isn't ordered
 
 const sett_data_limit_new="\r\n";//the new line delimitation
 //when compiled on windows : "\n"
@@ -28,27 +31,9 @@ const sett_display_transition_color=1;//must be >0 !
 const sett_display_transition_text=3;//must be >0 !
 
 
-/**
- * file variables :
- * in order to store all problems in a map variables.
- * 
- * data stored like that :
- * file_problems["XXXYYY"]=[AAA(,BBB,...)]
- * where XXX is the begin of the first word
- * where YYY is the end of the second word
- * where AAA (and potentialy BBB) is (are) solutions of the problem
- * are dirrectly read from files
- */
-let file_problems={"empthy":["soo","lot"]};
-let file_problems_keys=["empthy"];//is needed to acces random key.
-let file_words=["potato"];
-let file_readed=false;
-let file_readed_amount=0;
-
 //soluces lenght (solucesL)
 let file_solucesL_Min=0;//min soluce length
 let file_solucesL_Max=0;//max soluce length
-
 let file_solucesL_border=[];//index of each limit of soluce length
 //[ 0 , {file_solucesALimit[0]} [ = all problems with 0 solution
 //[ {file_solucesALimit[0]} , {file_solucesALimit[2]} [ = all problems with 1 solution
@@ -56,99 +41,12 @@ let file_solucesL_border=[];//index of each limit of soluce length
 //...
 //[ {file_solucesALimit[n-1]} , {file_solucesALimit[n]} [ = all problems with n solutions
 
+/**
+ * options variables :
+ * editable in game
+ */
+let game_option_minSoluces=-2;
 
-cat_add("lecture...","neg white");
-{
-	let file_xml = new XMLHttpRequest();
-	//ON : file finish reading
-	file_xml.onreadystatechange=function()
-		{//on file state change
-		    if (file_xml.readyState==4 && file_xml.status==200) 
-			{//is finsih reading
-				//cat_add("{soluces.txt} 2/3","dark gray");
-				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
-				file_problems={};
-				file_solucesL_Max=0;
-				const here_text_all=file_xml.responseText;
-				const here_text_lines=here_text_all.split(sett_data_limit_new);
-				for (let i=0;i<here_text_lines.length;i++)
-				{
-					let here_list=here_text_lines[i].split(sett_data_limit_between);
-					let here_length=here_list.length-1;
-					while (here_length>file_solucesL_Max)
-					{
-						file_solucesL_border[file_solucesL_Max]=i;
-						file_solucesL_Max++;
-					}
-					let k=wowo_use_text_case(here_list[0]);
-					file_problems[k]=[];
-					for (let i=1;i<(here_length+1);i++)
-					{
-						file_problems[k].push((wowo_use_text_case((here_list[i]))));
-					}
-					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
-				}
-				file_problems_keys=Object.keys(file_problems);
-
-				file_solucesL_border[file_solucesL_Max]=(here_text_lines.length - 1);
-				file_solucesL_Min=file_problems[file_problems_keys[0]].length;
-				game_option_minSoluces=file_solucesL_Min-1;
-				
-				console.log("[WOWO] [files] {soluces.txt} : reading... 3/3");
-		        console.log("[WOWO] [database] : click there :");
-		        console.log(file_problems);
-		        console.log("[WOWO] [database] : or not.");
-				cat_add("lu : soluces.txt","dark gray");
-
-				for (let i=0;i<file_solucesL_border.length;i++)
-				{
-					console.log(`${i} : ${file_solucesL_border[i]}`);
-				}
-
-				file_readed_amount++;
-				if (file_readed_amount===2 || !sett_game_wordCheck) wowo_action_load();
-		    }
-		}
-
-	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
-	cat_add("lecture : soluces.txt","dark gray");
-	file_xml.open('GET', 'build/soluces.txt', true);
-	file_xml.send();
-}
-
-if (sett_game_wordCheck)
-{
-	let file_xml = new XMLHttpRequest();
-	//ON : file finish reading
-	file_xml.onreadystatechange=function()
-		{//on file state change
-		    if (file_xml.readyState==4 && file_xml.status==200) 
-			{//is finsih reading
-				//cat_add("{words.txt} 2/3","dark gray");
-				console.log("[WOWO] [files] {words.txt} : reading... 2/3");
-				file_words=[];
-				const here_text_all=file_xml.responseText;
-				const here_text_lines=here_text_all.split(sett_data_limit_new);
-				for (let i=0;i<here_text_lines.length;i++)
-				{
-					file_words.push((wowo_use_text_case(here_text_lines[i])));
-				}
-
-				console.log("[WOWO] [files] {words.txt} : reading... 3/3");
-		        console.log("[WOWO] [database] : all words :");
-		        console.log(file_words);
-				cat_add("lu : words.txt","dark gray");
-
-				file_readed_amount++;
-				if (file_readed_amount===2) wowo_action_load();
-		    }
-		}
-
-	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
-	cat_add("lecture : words.txt","dark gray");
-	file_xml.open('GET', 'build/words.txt', true);
-	file_xml.send();
-}
 
 /**
  * game variables :
@@ -173,13 +71,6 @@ let game_round_answer="";
 
 let game_round_answer_good=[];
 let game_round_answer_wrong=[];
-
-
-/**
- * options variables :
- * editable in game
- */
-let game_option_minSoluces=-2;
 
 
 
@@ -287,6 +178,32 @@ function wowo_use_plural(f_num,f_end="s")
 		return f_end;
 }
 
+/**
+ * 
+ */
+function wowo_use_readFile(f_url, f_sucess, f_fail)
+{
+	file_request=new XMLHttpRequest();
+	file_xml.open('HEAD', f_url, true);
+	file_xml.send();
+	file_xml.onreadystatechange=function()
+	{
+		if (file_xml.status==404)
+		{
+			f_fail();
+		}
+		else
+		{
+			file_xml.open('OPEN', f_url, true);
+			file_xml.send();
+			file_xml.onreadystatechange=function()
+			{
+				if (file_xml.readyState==4 && file_xml.status==200) 
+					f_sucess();
+			}
+		}
+	}
+}
 
 //--- functions/game ---
 //game function
@@ -461,12 +378,11 @@ function wowo_game_isWord(f_str)
  */
 function wowo_display_load()
 {
-	
     display_block_vertical.style.transition=`background-color ${sett_display_transition_color}s`;
     display_block_contain.style.transition=`opacity ${sett_display_transition_text}s`;
 	display_block_side.style.transition=`opacity ${sett_display_transition_text}s`;
 
-	display_block_vertical.style.backgroundColor="#000000";
+	display_block_vertical.style.backgroundColor="#000";
 
 	display_block_vertical.addEventListener('transitionend', 
 	() => {
@@ -795,12 +711,10 @@ function wowo_action_load()
 //executed when files are readed
 {
 	span_loading_end=Date.now();
-	cat_add("fichiers lu","neg white");
-	file_readed=true;
 
 	wowo_game_menu();
 	//wowo_game_restart();
-	wowo_display_load();//depreciated
+	wowo_display_load();
 	wowo_display_refresh();
 	cat_add(`lecture et chargement : ${span_loading_end - span_loading_begin} ms`,"neg white bold");
 	cat_add("prêt !","magenta");
@@ -957,4 +871,148 @@ function wowo_action_next()
 		//wowo_game_restart();
 		wowo_display_refresh();
 	}
+}
+
+
+//--- reading ---
+
+/**
+ * file variables :
+ * in order to store all problems in a map variables.
+ * 
+ * data stored like that :
+ * file_problems["XXXYYY"]=[AAA(,BBB,...)]
+ * where XXX is the begin of the first word
+ * where YYY is the end of the second word
+ * where AAA (and potentialy BBB) is (are) solutions of the problem
+ * are dirrectly read from files
+ */
+let file_problems={"empthy":["soo","lot"]};
+let file_problems_keys=["empthy"];//is needed to acces random key.
+let file_words=["potato"];
+let file_readed=false;
+
+
+cat_add("lecture...","neg white");
+
+if (sett_game_wordCheck)
+{
+	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
+	cat_add("lecture : words.txt","dark gray");
+
+	let file_xml = new XMLHttpRequest();
+	file_xml.open('GET', 'build/words.txt', false);
+	file_xml.send();
+		
+	if (file_xml.readyState==4 && file_xml.status==200) 
+	{//on file state change
+		{//is finsih reading
+			//cat_add("{words.txt} 2/3","dark gray");
+			console.log("[WOWO] [files] {words.txt} : reading... 2/3");
+			file_words=[];
+			const here_text_all=file_xml.responseText;
+			const here_text_lines=here_text_all.split(sett_data_limit_new);
+			for (let i=0;i<here_text_lines.length;i++)
+			{
+				file_words.push((wowo_use_text_case(here_text_lines[i])));
+			}
+
+			console.log("[WOWO] [files] {words.txt} : reading... 3/3");
+	        console.log("[WOWO] [database] : all words :");
+	        console.log(file_words);
+			cat_add("lu : words.txt","dark gray");
+	    }
+	}
+	else
+	{
+		cat_add("WARN : [words.txt] absent","bold red");
+		sett_game_wordCheck=false;
+	}
+}
+
+
+//console.log(`state change : ${file_xml.readyState} ${file_xml.status}`)
+
+{
+	cat_add("lecture : soluces.txt","dark gray");
+	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
+	
+	let file_xml = new XMLHttpRequest();
+	file_xml.open('GET', 'build/soluces.txt', false);
+	file_xml.send();
+	
+	if (file_xml.readyState===4 && file_xml.status===200)
+	{
+		{//on file state change
+			{//is finsih reading
+				//cat_add("{soluces.txt} 2/3","dark gray");
+				console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
+				file_problems={};
+				file_solucesL_Max=0;
+				let here_text_all=file_xml.responseText;
+				//cant "const", bcs :
+				//avoid checking the last empty line
+				if (here_text_all[here_text_all.length-1]==="\n")
+				{
+					here_text_all=here_text_all.slice(0,here_text_all.length-1);
+					cat_add("remov last line");//!
+				}
+				const here_text_lines=here_text_all.split(sett_data_limit_new);
+				for (let i=0;i<here_text_lines.length;i++)
+				{
+					let here_list=here_text_lines[i].split(sett_data_limit_between);
+					let here_length=here_list.length-1;
+					if (sett_game_optionLength)
+					{
+						while (here_length>file_solucesL_Max)
+						{
+							file_solucesL_border[file_solucesL_Max]=i;
+							file_solucesL_Max++;
+						}
+						if (here_length<file_solucesL_Max && here_text_lines.length!=i+1)
+						{
+							sett_game_optionLength=false;
+					        cat_add("WARN : [soluces.txt] pas ordonné correctement","bold red");
+						}
+					}
+					let k=wowo_use_text_case(here_list[0]);
+					file_problems[k]=[];
+					for (let i=1;i<(here_length+1);i++)
+					{
+						file_problems[k].push((wowo_use_text_case((here_list[i]))));
+					}
+					//console.log("[WOWO] [database] :"+k+":"+file_problems[k]);
+				}
+				file_problems_keys=Object.keys(file_problems);
+
+				file_solucesL_border[file_solucesL_Max]=(here_text_lines.length - 1);
+				file_solucesL_Min=file_problems[file_problems_keys[0]].length;
+				game_option_minSoluces=file_solucesL_Min-1;
+				
+				console.log("[WOWO] [files] {soluces.txt} : reading... 3/3");
+		        console.log("[WOWO] [database] : click there :");
+		        console.log(file_problems);
+		        console.log("[WOWO] [database] : or not.");
+				cat_add("lu : soluces.txt","dark gray");
+
+				file_readed=true;
+				wowo_action_load();
+				cat_add("fichiers lu","neg white");
+				
+				for (let i=0;i<file_solucesL_border.length;i++)
+				{
+					console.log(`${i} : ${file_solucesL_border[i]}`);
+				}
+		    }
+		}
+	} 
+	else 
+	{
+		cat_add("FATAL : [soluces.txt] absent","bolder red");
+	}
+}
+
+if (file_readed)
+{
+	//can start the game
 }
