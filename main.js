@@ -184,23 +184,19 @@ function wowo_use_plural(f_num,f_end="s")
 function wowo_use_readFile(f_url, f_sucess, f_fail)
 {
 	file_request=new XMLHttpRequest();
-	file_xml.open('HEAD', f_url, true);
+	file_xml.open('OPEN', f_url, true);
 	file_xml.send();
 	file_xml.onreadystatechange=function()
 	{
-		if (file_xml.status==404)
+		if (file_xml.status===404)
 		{
 			f_fail();
+			return;
 		}
-		else
+		else if (file_xml.readyState===4 && file_xml.status===200)
 		{
-			file_xml.open('OPEN', f_url, true);
-			file_xml.send();
-			file_xml.onreadystatechange=function()
-			{
-				if (file_xml.readyState==4 && file_xml.status==200) 
-					f_sucess();
-			}
+			f_sucess();
+			return;
 		}
 	}
 }
