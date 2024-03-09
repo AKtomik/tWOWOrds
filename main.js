@@ -8,6 +8,9 @@ let span_timer_end=0;
 //--- initialization ---
 //the script is loaded when the page is totaly loaded
 
+let span_subloading_begin=Date.now();
+cat_add("variables...","neg white");
+
 
 /**
  * settings variables :
@@ -116,9 +119,14 @@ let display_block_side=document.getElementById("side");
 
 let display_anim_badCheck=false;
 
+cat_add(`variables en ${Date.now() - span_subloading_begin} ms`,"neg white");
+
 
 //--- functions/use ---
 //useful functions
+
+cat_add("fonctions...","neg white");
+span_subloading_begin=Date.now();
 
 
 /**
@@ -188,7 +196,7 @@ function wowo_use_readFile(f_url, f_sucess, f_fail)
 	{
 		if (file_xml.readyState===4)//if action finish
 		{
-			cat_add(`${file_xml.readyState} ${file_xml.status}`,"neg");
+			//cat_add(`${file_xml.readyState} ${file_xml.status}`,"neg");
 			if (file_xml.status===200)//if no problem
 			//is executed when the file sucessfuly finish reading
 			{
@@ -881,6 +889,8 @@ function wowo_action_next()
 	}
 }
 
+cat_add(`fonctions en ${Date.now() - span_loading_begin} ms`,"neg white");
+
 
 //--- reading ---
 
@@ -902,11 +912,12 @@ let file_readed=false;
 
 
 cat_add("lecture...","neg white");
+span_subloading_begin=Date.now();
+
 
 if (sett_game_wordCheck)
 {
 	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
-	cat_add("lecture : words.txt","dark gray");
 
 	wowo_use_readFile//reading file
 	(
@@ -914,6 +925,7 @@ if (sett_game_wordCheck)
 		,
 		function(f_f_text)//sucess
 		{
+			cat_add("lecture : words.txt","dark gray");
 			console.log("[WOWO] [files] {words.txt} : reading... 2/3");
 			file_words=[];
 			const here_text_all=f_f_text;
@@ -931,15 +943,15 @@ if (sett_game_wordCheck)
 		,
 		function()//failure
 		{
-			cat_add("WARN : [words.txt] absent","bold red");
+			cat_add("WARN : [words.txt] absent","red");
 			sett_game_wordCheck=false;
+			cat_add("une fonctionnalité désactivée","red");
 		}
 	);
 }
 
 {
 	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
-	cat_add("lecture : soluces.txt","dark gray");
 
 	wowo_use_readFile//reading file
 	(
@@ -947,6 +959,7 @@ if (sett_game_wordCheck)
 		,
 		function(f_f_text)//sucess
 		{
+			cat_add("lecture : soluces.txt","dark gray");
 			console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
 			file_problems={};
 			file_solucesL_Max=0;
@@ -972,8 +985,9 @@ if (sett_game_wordCheck)
 					}
 					if (here_length<file_solucesL_Max && here_text_lines.length!=i+1)
 					{
+				        cat_add("WARN : [soluces.txt] pas ordonné correctement","red");
 						sett_game_optionLength=false;
-				        cat_add("WARN : [soluces.txt] pas ordonné correctement","bold red");
+						cat_add("une fonctionnalité désactivée","red");
 					}
 				}
 				let k=wowo_use_text_case(here_list[0]);
@@ -997,8 +1011,8 @@ if (sett_game_wordCheck)
 			cat_add("lu : soluces.txt","dark gray");
 
 			file_readed=true;
+			cat_add(`lecture en ${Date.now() - span_subloading_begin} ms`,"neg white");
 			wowo_action_load();
-			cat_add("fichiers lu","neg white");
 			
 			for (let i=0;i<file_solucesL_border.length;i++)
 			{
@@ -1008,7 +1022,8 @@ if (sett_game_wordCheck)
 		,
 		function()//failure
 		{
-			cat_add("FATAL : [soluces.txt] absent","bolder red");
+			cat_add("FATAL : [soluces.txt] absent","bold red");
+			cat_add("le programme ne peut s'exécuter","bold red");
 		}
 	);
 }
