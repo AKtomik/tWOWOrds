@@ -460,10 +460,11 @@ function wowo_display_change(f_state)
 
 		display_element_can_next.innerHTML="ESPACE : abandonner";
 		display_element_can_next.style.color="#aaaaaa";
-		display_element_can_check.style.color="#aaaaaa";
 		
+		display_element_can_up.style.color="#aaa";
+		display_element_can_up.innerHTML="[saisie activée]";
+		display_element_can_up.style.display="";
 		display_element_can_down.style.display="none";
-		display_element_can_up.style.display="none";
 		display_element_opt_soluces.style.display="none";
 
 		display_element_head_subtitle.style.display="none";
@@ -477,6 +478,8 @@ function wowo_display_change(f_state)
 		display_element_can_check.style.color="#555";
 		
 		display_element_side_timer.style.color="#0000ff";
+
+		display_element_can_up.style.display="none";
 	}
 }
 
@@ -601,6 +604,15 @@ function wowo_display_refresh()
 			{
 				display_element_bar_left_shape.style.backgroundColor=here_color;
 				display_element_bar_right_shape.style.backgroundColor=here_color;
+			}
+			
+			if (game_round_answer.length===3)
+			{
+				display_element_can_check.style.color="#fff";
+			}
+			else
+			{
+				display_element_can_check.style.color="#aaa";
 			}
 		}
 	} else {
