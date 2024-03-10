@@ -9,7 +9,7 @@ let span_timer_end=0;
 //the script is loaded when the page is totaly loaded
 
 let span_subloading_begin=Date.now();
-cat_add("variables...","neg white");
+cat_add("variables...","neg gray");
 
 
 /**
@@ -21,6 +21,10 @@ let sett_game_wordCheck=true;//display if one of the two word is good.
 //automatically disabled if [words6.txt] didnt exist
 let sett_game_optionLength=true;//the player can change length
 //automatically disabled if [soluces.txt] isn't ordered
+
+const sett_data_method=false;//the method to get all values
+//false = using text file. requires [./build/soluces.txt]
+//true = using js file. requires [./build/soluces.js]
 
 const sett_data_limit_new="\r\n";//the new line delimitation
 //when compiled on windows : "\n"
@@ -71,6 +75,7 @@ let game_round_problem_left="...";
 let game_round_problem_right="...";
 let game_round_solutions=[];
 let game_round_answer="";
+let game_round_checked=false;
 
 let game_round_answer_good=[];
 let game_round_answer_wrong=[];
@@ -117,15 +122,14 @@ let display_block_contain=document.getElementById("screen_contain");
 let display_block_side=document.getElementById("side");
 
 
-let display_anim_badCheck=false;
 
-cat_add(`variables en ${Date.now() - span_subloading_begin} ms`,"neg white");
+cat_add(`variables en ${Date.now() - span_subloading_begin} ms`,"neg gray");
 
 
 //--- functions/use ---
 //useful functions
 
-cat_add("fonctions...","neg white");
+cat_add("fonctions...","neg gray");
 span_subloading_begin=Date.now();
 
 
@@ -565,7 +569,7 @@ function wowo_display_refresh()
 				{
 					here_color="#0000ff";
 				}
-				else if (display_anim_badCheck)
+				else if (game_round_checked && game_round_answer.length!=3)
 				{
 					here_color="#ffaa00";
 				}
@@ -790,7 +794,7 @@ function wowo_action_press(f_event)
 			{
 				game_round_answer=game_round_answer.slice(0,game_round_answer.length-1);
 				here_refresh=true;
-				display_anim_badCheck=false;
+				game_round_checked=false;
 			}
 		}
 		
@@ -808,8 +812,13 @@ function wowo_action_press(f_event)
 			{
 				if (game_round_answer.length<3)
 				{
-					display_anim_badCheck=false;
+					game_round_checked=false;
 					game_round_answer+=here_key;
+				}
+				else if (game_round_answer.length===3 && game_round_checked)
+				{
+					game_round_checked=false;
+					game_round_answer=here_key;
 				}
 			}
 		}
@@ -828,9 +837,9 @@ function wowo_action_press(f_event)
  */
 function wowo_action_check()
 {
+	game_round_checked=true;
 	if (game_round_answer.length!=3)
 	{
-		display_anim_badCheck=true;
 		wowo_display_refresh();
 	}
 	else if (!game_round_answer_wrong.includes(game_round_answer) && !game_round_answer_good.includes(game_round_answer))
@@ -889,7 +898,7 @@ function wowo_action_next()
 	}
 }
 
-cat_add(`fonctions en ${Date.now() - span_loading_begin} ms`,"neg white");
+cat_add(`fonctions en ${Date.now() - span_loading_begin} ms`,"neg gray");
 
 
 //--- reading ---
@@ -911,7 +920,7 @@ let file_words=["potato"];
 let file_readed=false;
 
 
-cat_add("lecture...","neg white");
+cat_add("lecture...","neg gray");
 span_subloading_begin=Date.now();
 
 
@@ -963,14 +972,7 @@ if (sett_game_wordCheck)
 			console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
 			file_problems={};
 			file_solucesL_Max=0;
-			let here_text_all=f_f_text;
-			//cant "const", bcs :
-			//avoid checking the last empty line
-			if (here_text_all[here_text_all.length-1]==="\n")
-			{
-				here_text_all=here_text_all.slice(0,here_text_all.length-1);
-				cat_add("remov last line");//!
-			}
+			const here_text_all=f_f_text;
 			const here_text_lines=here_text_all.split(sett_data_limit_new);
 			for (let i=0;i<here_text_lines.length;i++)
 			{
@@ -1011,7 +1013,7 @@ if (sett_game_wordCheck)
 			cat_add("lu : soluces.txt","dark gray");
 
 			file_readed=true;
-			cat_add(`lecture en ${Date.now() - span_subloading_begin} ms`,"neg white");
+			cat_add(`lecture en ${Date.now() - span_subloading_begin} ms`,"neg gray");
 			wowo_action_load();
 			
 			for (let i=0;i<file_solucesL_border.length;i++)
