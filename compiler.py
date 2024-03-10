@@ -96,17 +96,8 @@ while (program_run):
 			
 			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/words.txt","r") as myfile:
 				word_all=myfile.readlines()
-				#word_strip = [v for v in word_all if (len(v)==7)]
 				word_strip = [v.rstrip("\n") for v in word_all]
-				#print(word_strip)
 
-			#for v_second in word_strip:
-			#	print(v_second[0]+v_second[1]+v_second[2]+" :")
-			#	for v_first in word_strip:
-			#		if (v_first[3]+v_first[4]+v_first[5]==v_second[0]+v_second[1]+v_second[2]):
-			#			print(v_first+" "+v_second)
-
-			
 			print(f"{prefix_action()} : compiling... prepare...")
 
 			last_first_begin=""
@@ -120,7 +111,6 @@ while (program_run):
 
 			print(f"{prefix_action()} : compiling... solving...")
 			for v_first in word_strip:
-				#if (index>=len(word_strip)/10*index_ten):
 				if (count_msg_time+ sett_timeout <time()):
 					print(f"{prefix_action()} : compiling... solving... [{round(index / len(word_strip)*100)}%] ({v_first})")
 					count_msg_time=time()
@@ -170,7 +160,7 @@ while (program_run):
 			print(f"{prefix_action()} : compiled!")
 
 
-	if (user_action==1 or user_action==5):#order from bigger to smaller
+	if (user_action==1 or user_action==5):#order by length (from the word with less solutions, to the word with more solutions)
 		
 		if (not os.path.isfile("./build/soluces.txt")):
 			print(f"{prefix_action()} : cant find solutions!")
@@ -201,7 +191,7 @@ while (program_run):
 			
 
 
-			print(f"{prefix_action()} : ordering...")
+			print(f"{prefix_action()} : ordering... pulling...")
 
 			index=0
 			for v in soluces_strip:
@@ -210,16 +200,11 @@ while (program_run):
 					if (char==" "):
 						here_length+=1
 				index+=1
-				#save_lineslength[here_length].append(f"{here_length}_{index} -> {v}")
 				save_lineslength[here_length].append(v)
 
 			#print(f"--- {len(save_lineslength)} ---")
 			#for i1 in range(0,len(save_lineslength)):
 			#	print(f"{i1} = len( {len(save_lineslength[i1])} )")
-
-
-
-
 
 			print(f"{prefix_action()} : ordering... saving...")
 			with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mode="w", encoding="utf-8") as myfile:
@@ -234,7 +219,7 @@ while (program_run):
 
 
 
-	if (user_action==1 or user_action==6):#clean useless
+	if (user_action==1 or user_action==6):#clean useless files
 		
 		print(f"{prefix_action()} : cleanup...")
 		if (not os.path.isdir("./build")):

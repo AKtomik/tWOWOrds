@@ -29,9 +29,6 @@ with open(os.path.dirname(os.path.realpath('__file__'))+"/build/soluces.txt", mo
 print(f"{prefix_action()} : read!")
 
 
-#print("[WOWO] [finder] : wich task have I todo?")
-
-
 
 print(f"{prefix_action()} : searching...")
 #total

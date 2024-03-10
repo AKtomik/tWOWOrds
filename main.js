@@ -59,8 +59,8 @@ let game_option_minSoluces=-2;
  * game variables :
  * clear when reload (als all other)
  */
+let game_recursive_id=0;//prevent multiples recursive display function
 let game_state=-1;
-let game_recursiveId=0;
 //-1 = loading
 //0 = menu
 //1 = game round
@@ -190,6 +190,12 @@ function wowo_use_plural(f_num,f_end="s")
 		return f_end;
 }
 
+/**
+ * in order to read a file using a httprequest.
+ * @param {string} f_url url of the file to read
+ * @param {Function} f_sucess code executed when sucessful reading
+ * @param {Function} f_fail code executed when reading fail
+ */
 function wowo_use_readFile(f_url, f_sucess, f_fail)
 {
 	let file_xml=new XMLHttpRequest();
@@ -204,6 +210,7 @@ function wowo_use_readFile(f_url, f_sucess, f_fail)
 			if (file_xml.status===200)//if no problem
 			//is executed when the file sucessfuly finish reading
 			{
+				//the sucess function have to take as parameter the reading string
 				f_sucess(file_xml.responseText);
 				return;
 			}
@@ -219,7 +226,8 @@ function wowo_use_readFile(f_url, f_sucess, f_fail)
 	file_xml.open
 	('GET',//on odrer the get the file content
 	f_url,//the url passed by argument
-	true//"L’utilisation d’XMLHttpRequest de façon synchrone sur le fil d’exécution principal est obsolète à cause de son impact négatif sur la navigation de l’utilisateur final. Consulter https://xhr.spec.whatwg.org/#sync-warning pour plus d’informations."
+	true
+	//"L’utilisation d’XMLHttpRequest de façon synchrone sur le fil d’exécution principal est obsolète à cause de son impact négatif sur la navigation de l’utilisateur final. Consulter https://xhr.spec.whatwg.org/#sync-warning pour plus d’informations."
 	//so we use async request
 	);
 	file_xml.send();
@@ -240,10 +248,8 @@ function wowo_game_menu()
 	game_round_answer="";
 	game_round_answer_good=[];
 	game_round_answer_wrong=[];
-	//game_round_problem_key=file_problems_keys[wowo_use_rickroll(file_problems_keys.length)];
 	game_round_problem_left="...";
 	game_round_problem_right="...";
-	//game_round_solutions=file_problems[game_round_problem_key];
 	
 	//display
 	wowo_display_change(0);
@@ -295,7 +301,6 @@ function wowo_game_restart()
 	//messages
 	cat_add("nouvelle manche","cyan bold");
 	cat_add(`[${game_round_problem_left}[_]${game_round_problem_right}] (${game_round_solutions.length})`);
-	//cat_add(`${game_round_solutions.length} possibility${wowo_use_plural(game_round_solutions.length)}`);
 	console.log("[WOWO] [round] : hi cheater. here all solutions :");
 	console.log(game_round_solutions);
 	console.log("[WOWO] [round] : the problem="+game_round_problem_key);
@@ -327,23 +332,12 @@ function wowo_game_end()
 
 	//actions
 	wowo_display_refresh();
-	wowo_display_switch(0);//the state must be changed before
+	if (game_round_solutions.length>1)//avoid recursive for unic solution case (bcs it would be useless)
+	{
+		wowo_display_switch(0);//the state must be changed before
+	}
 }
 
-
-/**
- * check if is one of the answer of the round
- * @param {string} f_str the 3 letters
- * @returns {boolean} is an anwers
- */
-function wowo_game_isAnswer(f_str)
-{
-	//this list is pretty small, so
-	//iterate thoug the whole list
-	for (let i=0;i<game_round_solutions.length;i++)
-		if (game_round_solutions[i]===f_str) return true;
-	return false;
-}
 
 /**
  * check if the word given is a real word
@@ -360,10 +354,12 @@ function wowo_game_isWord(f_str)
 	//time spend using Binary Search : ~0ms
 	//you can check by yourself :
 	
+	//let here_begin=Date.now();//time
+
 	//classic :
-	//for (let i=0;i<file_words.length;i++)	if (file_words[i]===f_str) return true;
-	//console.log(`search word ${f_str}`);
-	//let here_begin=Date.now();
+	/*
+	for (let i=0;i<file_words.length;i++)	if (file_words[i]===f_str) return true;
+	*/
 
 	//binary :
 	{
@@ -385,7 +381,22 @@ function wowo_game_isWord(f_str)
 		}
 	}
 	
-	//console.log(`${Date.now() - here_begin} ms`);
+	//console.log(`${Date.now() - here_begin} ms`);//time
+	return false;
+}
+
+
+/**
+ * check if is one of the solutions of the round
+ * @param {string} f_str the 3 letters
+ * @returns {boolean} are a solution
+ */
+function wowo_game_isSoluce(f_str)
+{
+	//this list is really small ;
+	//we can iterate thoug the whole list
+	for (let i=0;i<game_round_solutions.length;i++)
+		if (game_round_solutions[i]===f_str) return true;
 	return false;
 }
 
@@ -405,7 +416,8 @@ function wowo_display_load()
 	display_block_vertical.style.backgroundColor="#000";
 
 	display_block_vertical.addEventListener('transitionend', 
-	() => {
+	() => {//this happend when first transition end
+		//we can begin the nexts transitions
 		display_block_contain.style.opacity=1;
 		display_block_side.style.opacity=1;
 	});
@@ -491,7 +503,6 @@ function wowo_display_change(f_state)
  */
 function wowo_display_refresh()
 {
-
 	//in menu, the display_refresh is call a lot, but only a parth of the refresh is needed, so it's fine
 	if (game_state!=0)
 	{
@@ -605,7 +616,7 @@ function wowo_display_refresh()
 				display_element_bar_left_shape.style.backgroundColor=here_color;
 				display_element_bar_right_shape.style.backgroundColor=here_color;
 			}
-			
+
 			if (game_round_answer.length===3)
 			{
 				display_element_can_check.style.color="#fff";
@@ -632,8 +643,6 @@ function wowo_display_refresh()
 			display_element_can_down.style.color="#555";
 	}
 
-
-
 	//just edit string
 	{//display answer
 		let here_string=game_round_answer;
@@ -658,21 +667,21 @@ function wowo_display_refresh()
 
 /**
  * a recursive function to switch answer between solutions
- * @param {int} f_i the solution index (nothing when first call)
+ * @param {int} f_i the solution index (nothing when outside call)
+ * @param {int} f_id id of the execution (nothing when outside call)
  */
 function wowo_display_switch(f_i=0,f_id=0)
 {
 	if (f_id===0)
 	{
-		game_recursiveId++;
-		f_id=game_recursiveId;
+		game_recursive_id++;
+		f_id=game_recursive_id;
 	}
 	if (game_state===2)
 	{
 		game_round_answer=game_round_solutions[f_i];
 		wowo_display_refresh();
 		
-		if (game_round_solutions.length>1)//avoid recursive for unic solution case
 		{
 			f_i++;
 			if (!(f_i<game_round_solutions.length)) f_i=0;
@@ -683,13 +692,14 @@ function wowo_display_switch(f_i=0,f_id=0)
 
 /**
  * a recursive function to display random letters for LR problems
+ * @param {int} f_id id of the execution (nothing when outside call)
  */
 function wowo_display_blur(f_id=0)
 {
 	if (f_id===0)
 	{
-		game_recursiveId++;
-		f_id=game_recursiveId;
+		game_recursive_id++;
+		f_id=game_recursive_id;
 	}
 	if (game_state===0)
 	{
@@ -708,7 +718,8 @@ function wowo_display_blur(f_id=0)
  * for the timer
  * executed each 10ms
  */
-setInterval(() => {
+setInterval(
+	function(){//anonymous function
 	if (game_state===1)
 	{
 		let here_time = Date.now() - span_timer_begin;//ms
@@ -859,7 +870,7 @@ function wowo_action_check()
 
 		let here_edit=true;
 		
-		if (wowo_game_isAnswer(game_round_answer))
+		if (wowo_game_isSoluce(game_round_answer))
 		{
 			game_round_answer_good.push(game_round_answer);
 			cat_add(`${game_round_answer} : bonne réponse`,"green");
@@ -924,7 +935,7 @@ cat_add(`fonctions en ${Date.now() - span_loading_begin} ms`,"neg gray");
  * where XXX is the begin of the first word
  * where YYY is the end of the second word
  * where AAA (and potentialy BBB) is (are) solutions of the problem
- * are dirrectly read from files
+ * all that is dirrectly read from file
  */
 let file_problems={"empthy":["soo","lot"]};
 let file_problems_keys=["empthy"];//is needed to acces random key.
@@ -940,7 +951,7 @@ if (sett_game_wordCheck)
 {
 	console.log("[WOWO] [files] {words.txt} : reading... 1/3");
 
-	wowo_use_readFile//reading file
+	wowo_use_readFile//reading file (function)
 	(
 		'build/words.txt'//url
 		,
@@ -974,7 +985,7 @@ if (sett_game_wordCheck)
 {
 	console.log("[WOWO] [files] {soluces.txt} : reading... 1/3");
 
-	wowo_use_readFile//reading file
+	wowo_use_readFile//reading file (function)
 	(
 		'build/soluces.txt'//url
 		,
