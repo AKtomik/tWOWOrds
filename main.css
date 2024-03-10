@@ -1,24 +1,22 @@
 /* custom fonts */
 @font-face {
-  font-family: 'letters_question';
-  src: url(./source/fonts/answer.ttf);
-  /*src: url(./source/fonts/question.otf);*/
+  font-family: 'code';
+  src: url(./source/fonts/code.ttf);
 }
 @font-face {
-  font-family: 'letters_answer';
-  src: url(./source/fonts/answer.ttf);
+  font-family: 'texto';
+  src: url(./source/fonts/talk.otf);
 }
 @font-face {
-  font-family: 'letters_words';
-  src: url(./source/fonts/answer.ttf);
+  font-family: 'digits';
+  src: url(./source/fonts/digits.ttf);
 }
 
 
 body {
-	background-color: rgb(255,255,255);
+background-color: rgb(255,255,255);
 #screen_contain_vertical { /* first box */
 
-	background-color: rgb(255,255,255);
     transition: background-color 10s;
 
 	position:fixed;
@@ -49,7 +47,6 @@ body {
 	header {
 		justify-content: center;
 		text-align: center;
-		font-family: 'letters_answer';
 
 		white-space: nowrap;
 
@@ -62,6 +59,7 @@ body {
 		#soluces {
 
 			color: #555555;
+			font-family: 'code';
 
 			font-size: 2.5vmax;
 			line-height: 2.5vmax;
@@ -74,6 +72,7 @@ body {
 			transform: translate(-50%, 0%);
 			
 			color: #555555;
+			font-family: 'texto';
 
 			font-size: 10vmax;
 			line-height: 0vmax;
@@ -86,6 +85,7 @@ body {
 			transform: translate(-50%, 0%);
 			
 			color: #555555;
+			font-family: 'texto';
 
 			font-size: 2vmax;
 			line-height: 1vmax;
@@ -110,20 +110,17 @@ body {
 		}
 	}
 
+  	font-family: 'code';
 	/* specific by items */
 	#answer {
 		color: rgb(0,0,255);
-  		font-family: 'letters_answer';
 	}
 	
 	#question_left {
 		color: rgb(255,255,255);
-  		font-family: 'letters_question';
-
 	}
 	#question_right {
 		color: rgb(255,255,255);
-  		font-family: 'letters_question';
 
 	}
 
@@ -132,7 +129,7 @@ body {
 
 		/* bar */
 		#shape_bars {
-			font-family: 'letters_words';
+			font-family: 'code';
 			font-size: 5vmax;
 
 			/*display: inline-block;*/
@@ -228,12 +225,14 @@ nav {
 
 	padding-left: 5vmax;
 	
-	font-family: 'letters_words';
+	font-family: 'code';
 	font-size: 2vmax;
 	#side_timer {
+		font-family: 'digits';
 		font-size: 5vmax;
 	}
 	.can {
+		font-family: 'texto';
 		font-size: 1vmax;
 	}
 	#option_soluces {
@@ -248,7 +247,7 @@ aside {
 	bottom:-2.8vmax;
 	text-align: right;
 	
-	font-family: letters_words;
+	font-family: 'code';
 
 
 	#msg_cat {
