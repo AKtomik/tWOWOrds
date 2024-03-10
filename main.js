@@ -952,7 +952,7 @@ if (sett_game_wordCheck)
 		,
 		function()//failure
 		{
-			cat_add("WARN : [words.txt] absent","red");
+			cat_add("WARN : [words.txt] inacessible","red");
 			sett_game_wordCheck=false;
 			cat_add("une fonctionnalité désactivée","red");
 		}
@@ -1024,7 +1024,7 @@ if (sett_game_wordCheck)
 		,
 		function()//failure
 		{
-			cat_add("FATAL : [soluces.txt] absent","bold red");
+			cat_add("FATAL : [soluces.txt] inacessible","bold red");
 			cat_add("le programme ne peut s'exécuter","bold red");
 		}
 	);

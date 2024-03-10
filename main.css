@@ -22,10 +22,10 @@ body {
     transition: background-color 10s;
 
 	position:fixed;
-	top:30px;
-	right:30px;
-	bottom:30px;
-	left:30px;
+	top:2vmax;
+	right:2vmax;
+	bottom:2vmax;
+	left:2vmax;
 
 
 #screen_contain_horizontal { /* second box */
@@ -41,16 +41,12 @@ body {
 	opacity: 0;
     transition: opacity 10s;
 
-	background-color: rgb(255,255,255); /*to debug*/
-	/*outline: solid 2px blue; to debug*/
+	background-color: rgb(255,255,255);
 	display: inline-block;
 	font-size: 0;
 	
 
 	header {
-		/*outline: solid 2px red; to debug*/
-
-
 		justify-content: center;
 		text-align: center;
 		font-family: 'letters_answer';
@@ -105,9 +101,8 @@ body {
 		background-color: rgb(13,17,23);
 		
 		section {
-			/*outline: solid 2px red; to debug*/
 			font-size: 5vmax;
-			padding: 0px;
+			padding: 0;
 			/*padding: 3vmax 3vw 3vmax 3vw;*/
 			
 			display: flex;
@@ -117,19 +112,16 @@ body {
 
 	/* specific by items */
 	#answer {
-		/*outline: solid 2px blue; to debug*/
 		color: rgb(0,0,255);
   		font-family: 'letters_answer';
 	}
 	
 	#question_left {
-		/*outline: solid 2px white; to debug*/
 		color: rgb(255,255,255);
   		font-family: 'letters_question';
 
 	}
 	#question_right {
-		/*outline: solid 2px white; to debug*/
 		color: rgb(255,255,255);
   		font-family: 'letters_question';
 
@@ -137,8 +129,6 @@ body {
 
 	/* generals for item */
 	footer {
-
-		/*outline: solid 2px purple; to debug*/
 
 		/* bar */
 		#shape_bars {
@@ -160,17 +150,17 @@ body {
 				/*margin-left: 0;
 				margin-right: auto;*/
 				position: absolute;
-				left: 0px;
+				left: 0;
 				text-align: left;
 
 				.bar_shape {
 					position: absolute;
-					left: 0px;
+					left: 0;
 					top: 0vmax;
 				}
 				.bar_text {
 					position: absolute;
-					left: 0px;
+					left: 0;
 					top: -5vmax;/* slided */
 				}
 
@@ -180,17 +170,17 @@ body {
 				/*margin-left: auto; 
 				margin-right: 0;*/
 				position: absolute;
-				right: 0px;
+				right: 0;
 				text-align: right;
 
 				.bar_shape {
 					position: absolute;
-					right: 0px;
+					right: 0;
 					top: 11vmax;/* slided */
 				}
 				.bar_text {
 					position: absolute;
-					right: 0px;
+					right: 0;
 					top: 0vmax;
 				}
 			}
@@ -198,6 +188,7 @@ body {
 	}
 
 	/* buttons */
+	/*
 	#buttons {
 		
 		color: rgb(0,0,255);
@@ -213,9 +204,10 @@ body {
 
 
 		input {
-			padding: 0px;
+			padding: 0;
 		}
 	}
+	*/
 }
 }
 
@@ -228,11 +220,11 @@ nav {
 
 	position:absolute;
 	top: 0%;
-	left: 0px;
-	/*
-	top: 50%;
-	transform: translate(0%, -50%);
-	*/
+	left: 0;
+	
+	/*top: 50%;
+	transform: translate(0%, -50%);*/
+	
 
 	padding-left: 5vmax;
 	
@@ -252,21 +244,21 @@ nav {
 
 aside {
 	position: absolute;
-	right:10px;
-	bottom:-40px;
+	right:1vmax;
+	bottom:-2.8vmax;
 	text-align: right;
 	
 	font-family: letters_words;
 
 
 	#msg_cat {
-		font-size:15px;
+		font-size:1vmax;
 		/*font-size:1vmax;*/
 		color:rgb(255,255,255);
 
 	}
 	#msg_the {
-		font-size:15px;
+		font-size:1vmax;
 		color: rgb(13,17,23);
 	}
 
@@ -277,6 +269,7 @@ aside {
 
 
 /* -- colorations -- */
+/* used for cat */
 /* you can edit them if you want */
 
 b {
