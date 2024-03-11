@@ -321,7 +321,7 @@ function wowo_game_end()
 {
 
 	//cat
-	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} trouvé${wowo_use_plural(game_round_answer_good.length)} en ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"cyan");
+	cat_add(`${game_round_answer_good.length}/${game_round_solutions.length} trouvé${wowo_use_plural(game_round_answer_good.length)} en ${Math.floor((Date.now() - span_timer_begin)/1000)}.${Math.ceil((Date.now() - span_timer_begin)%1000)}s`,"");
 	//cat_add("end round","gray");
 
 	//display
@@ -332,10 +332,7 @@ function wowo_game_end()
 
 	//actions
 	wowo_display_refresh();
-	if (game_round_solutions.length>1)//avoid recursive for unic solution case (bcs it would be useless)
-	{
-		wowo_display_switch(0);//the state must be changed before
-	}
+	wowo_display_switch(0);//the state must be changed before
 }
 
 
@@ -617,13 +614,16 @@ function wowo_display_refresh()
 				display_element_bar_right_shape.style.backgroundColor=here_color;
 			}
 
-			if (game_round_answer.length===3)
-			{
-				display_element_can_check.style.color="#fff";
-			}
-			else
-			{
-				display_element_can_check.style.color="#aaa";
+			if (game_state===1)
+			{//can check dispkay
+				if (game_round_answer.length===3)
+				{
+					display_element_can_check.style.color="#fff";
+				}
+				else
+				{
+					display_element_can_check.style.color="#aaa";
+				}
 			}
 		}
 	} else {
@@ -682,6 +682,7 @@ function wowo_display_switch(f_i=0,f_id=0)
 		game_round_answer=game_round_solutions[f_i];
 		wowo_display_refresh();
 		
+		if (game_round_solutions.length>1)//avoid recursive for unic solution case (bcs it would be useless)
 		{
 			f_i++;
 			if (!(f_i<game_round_solutions.length)) f_i=0;
