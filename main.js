@@ -7,6 +7,9 @@ let span_timer_end=0;
 
 //--- initialization ---
 //the script is loaded when the page is totaly loaded
+/**
+ * it is realy fast, and allways used.
+ */
 
 let span_subloading_begin=Date.now();
 cat_add("variables...","neg gray");
@@ -128,6 +131,9 @@ cat_add(`variables en ${Date.now() - span_subloading_begin} ms`,"neg gray");
 
 //--- functions/use ---
 //useful functions
+/**
+ * all thes function are pretty simple, but realy useful.
+ */
 
 cat_add("fonctions...","neg gray");
 span_subloading_begin=Date.now();
@@ -235,6 +241,10 @@ function wowo_use_readFile(f_url, f_sucess, f_fail)
 
 //--- functions/game ---
 //game function
+/**
+ * thes functions are used dirrectly by the game.
+ * only not visible action.
+ */
 
 
 
@@ -399,10 +409,14 @@ function wowo_game_isSoluce(f_str)
 
 
 //--- functions/display ---
+/**
+ * all function in order to display elements on the web page.
+ * you can change display functions to have a totaly different look, without touching game functions
+ */
 
 
 /**
- * display elements when all is loaded
+ * display elements when all is loaded.
  */
 function wowo_display_load()
 {
@@ -926,6 +940,9 @@ cat_add(`fonctions en ${Date.now() - span_loading_begin} ms`,"neg gray");
 
 
 //--- reading ---
+/**
+ * here you are reading files.
+ */
 
 /**
  * file variables :
