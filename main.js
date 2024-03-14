@@ -29,9 +29,8 @@ const sett_data_method=false;//the method to get all values
 //false = using text file. requires [./build/soluces.txt]
 //true = using js file. requires [./build/soluces.js]
 
-const sett_data_limit_new="\r\n";//the new line delimitation
-//when compiled on windows : "\n"
-//when compiled on linux : "\r\n" (yes, I tried it)
+const sett_data_limit_new="\n";//the new line delimitation
+//dont think about "\r"
 const sett_data_limit_between=" ";//the spacing character delimitation
 
 const sett_type_alphabet="abcdefghijklmnopqrstuvwxyz";//case sensive
@@ -978,7 +977,8 @@ if (sett_game_wordCheck)
 			cat_add("lecture : words.txt","dark gray");
 			console.log("[WOWO] [files] {words.txt} : reading... 2/3");
 			file_words=[];
-			const here_text_all=f_f_text;
+			let here_text_all=f_f_text;
+			here_text_all=here_text_all.replace(/\r/g,'');
 			const here_text_lines=here_text_all.split(sett_data_limit_new);
 			for (let i=0;i<here_text_lines.length;i++)
 			{
@@ -1013,7 +1013,8 @@ if (sett_game_wordCheck)
 			console.log("[WOWO] [files] {soluces.txt} : reading... 2/3");
 			file_problems={};
 			file_solucesL_Max=0;
-			const here_text_all=f_f_text;
+			let here_text_all=f_f_text;
+			here_text_all=here_text_all.replace(/\r/g,'');
 			const here_text_lines=here_text_all.split(sett_data_limit_new);
 			for (let i=0;i<here_text_lines.length;i++)
 			{
@@ -1056,11 +1057,6 @@ if (sett_game_wordCheck)
 			file_readed=true;
 			cat_add(`lecture en ${Date.now() - span_subloading_begin} ms`,"neg gray");
 			wowo_action_load();
-			
-			for (let i=0;i<file_solucesL_border.length;i++)
-			{
-				console.log(`${i} : ${file_solucesL_border[i]}`);
-			}
 		}
 		,
 		function()//failure
